@@ -94,6 +94,85 @@
             background-color: #4cae4c;
             transform: translateY(-2px);
         }
+        .crew-role-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .upload-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        
+        .upload-btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .captain-upload {
+            background-color: #6a1b9a;
+        }
+        
+        .helmsman-upload {
+            background-color: #0277bd;
+        }
+        
+        .gunner-upload {
+            background-color: #d32f2f;
+        }
+        
+        .boatswain-upload {
+            background-color: #388e3c;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .clear-btn {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+        
+        .crew-role-stat {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-top: 5px;
+        }
 
         .grid-container {
             display: grid;
@@ -603,86 +682,6 @@
             opacity: 1;
         }
 
-        /* Character upload functionality styles */
-        .upload-container {
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px dashed #ccc;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .upload-container:hover {
-            background-color: rgba(226, 240, 255, 0.8);
-            border-color: #3d6a8a;
-        }
-
-        .upload-icon {
-            font-size: 1.5rem;
-            color: #3d6a8a;
-            margin-bottom: 5px;
-        }
-
-        .upload-text {
-            font-size: 0.8rem;
-            color: #555;
-        }
-
-        .character-info {
-            margin-top: 10px;
-            padding: 8px;
-            background-color: rgba(226, 240, 255, 0.5);
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        .character-name {
-            font-weight: bold;
-            color: #1a3a5a;
-        }
-
-        .character-details {
-            font-size: 0.8rem;
-            color: #555;
-            margin-top: 3px;
-        }
-
-        .remove-character {
-            font-size: 0.8rem;
-            color: #d9534f;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        .remove-character:hover {
-            text-decoration: underline;
-        }
-
-        .crew-upload-section {
-            position: relative;
-        }
-
-        .spinner {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #3d6a8a;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
         @media print {
             body {
                 background-color: white;
@@ -699,6 +698,7 @@
     </style>
 </head>
 <body>
+    <div id="notification" class="notification">Character uploaded successfully!</div>
     <div class="sheet-container">
         <img src="/api/placeholder/800/600" alt="Ship Silhouette" class="watermark">
         
@@ -811,19 +811,35 @@
                     <div class="crew-roles" style="margin-top: 20px;">
                         <div class="crew-role">
                             <div class="crew-role-name">Captain:</div>
-                            <input type="text" class="crew-role-player" id="captainPlayer" placeholder="Player name...">
+                            <div class="crew-role-input-group">
+                                <input type="text" class="crew-role-player" id="captainPlayer" placeholder="Player name..." readonly>
+                                <button class="upload-btn captain-upload" onclick="triggerFileUpload('captain')">Upload Character</button>
+                                <input type="file" id="captainFileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'captain')">
+                            </div>
                         </div>
                         <div class="crew-role">
                             <div class="crew-role-name">Helmsman:</div>
-                            <input type="text" class="crew-role-player" id="helmsmanPlayer" placeholder="Player name...">
+                            <div class="crew-role-input-group">
+                                <input type="text" class="crew-role-player" id="helmsmanPlayer" placeholder="Player name..." readonly>
+                                <button class="upload-btn helmsman-upload" onclick="triggerFileUpload('helmsman')">Upload Character</button>
+                                <input type="file" id="helmsmanFileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'helmsman')">
+                            </div>
                         </div>
                         <div class="crew-role">
                             <div class="crew-role-name">Gunner:</div>
-                            <input type="text" class="crew-role-player" id="gunnerPlayer" placeholder="Player name...">
+                            <div class="crew-role-input-group">
+                                <input type="text" class="crew-role-player" id="gunnerPlayer" placeholder="Player name..." readonly>
+                                <button class="upload-btn gunner-upload" onclick="triggerFileUpload('gunner')">Upload Character</button>
+                                <input type="file" id="gunnerFileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'gunner')">
+                            </div>
                         </div>
                         <div class="crew-role">
                             <div class="crew-role-name">Boatswain:</div>
-                            <input type="text" class="crew-role-player" id="boatswainPlayer" placeholder="Player name...">
+                            <div class="crew-role-input-group">
+                                <input type="text" class="crew-role-player" id="boatswainPlayer" placeholder="Player name..." readonly>
+                                <button class="upload-btn boatswain-upload" onclick="triggerFileUpload('boatswain')">Upload Character</button>
+                                <input type="file" id="boatswainFileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'boatswain')">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1145,3 +1161,636 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Toggle power module activation
+        function togglePowerModule(module) {
+            // Check if we're activating or deactivating
+            const activating = !module.classList.contains('active');
+            
+            if (activating) {
+                // Check if we have enough power charges
+                const availableCharges = parseInt(document.getElementById('availablePowerCharges').value);
+                const activeModules = document.querySelectorAll('.power-module.active').length;
+                const maxModules = availableCharges;
+                
+                // Update max modules display
+                document.getElementById('maxModules').textContent = maxModules;
+                
+                // Check if we can activate more modules
+                if (activeModules >= maxModules) {
+                    // Visual error indication instead of alert
+                    module.classList.add('error');
+                    setTimeout(() => {
+                        module.classList.remove('error');
+                    }, 500);
+                    return;
+                }
+                
+                // Check module cost
+                const moduleCost = parseInt(module.getAttribute('data-cost'));
+                if (activeModules + moduleCost > maxModules) {
+                    // Visual error indication
+                    module.classList.add('error');
+                    setTimeout(() => {
+                        module.classList.remove('error');
+                    }, 500);
+                    return;
+                }
+            }
+            
+            // Toggle active state
+            module.classList.toggle('active');
+            
+            // Update active modules counter
+            updateActiveModulesCount();
+            
+            saveToLocalStorage();
+        }
+        
+        // Toggle captain command selection
+        function selectCommand(option, type) {
+            // Remove selected class from all options
+            document.querySelectorAll('.command-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            option.classList.add('selected');
+            saveToLocalStorage();
+        }
+        
+        // Update active modules counter
+        function updateActiveModulesCount() {
+            const activeModules = document.querySelectorAll('.power-module.active').length;
+            document.getElementById('activeModulesCount').textContent = activeModules;
+        }
+        
+        // Update crew count and daily cost
+        function updateCrewCount() {
+            // Get all player characters (minimum 5)
+            const playerCharacters = 5;
+            
+            // Get additional crew
+            let additionalCrew = 0;
+            let dailyCost = 0;
+            
+            document.querySelectorAll('.crew-number').forEach(input => {
+                const crewCount = parseInt(input.value);
+                const crewCost = parseFloat(input.getAttribute('data-cost'));
+                
+                additionalCrew += crewCount;
+                dailyCost += crewCount * crewCost;
+            });
+            
+            // Update display
+            const totalCrew = playerCharacters + additionalCrew;
+            document.getElementById('currentCrewCount').textContent = totalCrew;
+            document.getElementById('dailyCrewCost').textContent = dailyCost.toFixed(1) + ' gp';
+            
+            // Check if we're over max crew
+            if (totalCrew > 15) {
+                alert('Warning: You have exceeded the maximum crew capacity of 15!');
+            }
+        }
+        
+        // Sync velocity and direction between displays
+        function syncHelmsmanValues() {
+            // Sync current velocity
+            const currentVelocity = document.getElementById('currentVelocityHelm').value;
+            
+            // Sync current direction
+            const currentDirection = document.getElementById('currentDirectionHelm').value;
+        }
+        
+        // Save all editable content to local storage
+        function saveSheet() {
+            // Get all input fields and their values
+            const inputs = document.querySelectorAll('input, select');
+            const data = {};
+            
+            inputs.forEach(input => {
+                if (input.id) {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            // Save active power modules
+            const powerModules = document.querySelectorAll('.power-module');
+            data['powerModulesState'] = Array.from(powerModules).map(module => {
+                return {
+                    id: module.id,
+                    active: module.classList.contains('active')
+                };
+            });
+            
+            // Save captain command selection
+            const commandOptions = document.querySelectorAll('.command-option');
+            data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
+            
+            // Save to local storage
+            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+            
+            // Provide user feedback
+            alert('Ship data saved!');
+            
+            // Create a download option
+            const dataStr = JSON.stringify(data);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'OceansCourtExpress_' + new Date().toISOString().slice(0, 10) + '.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        // Load data from local storage on page load
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('oceansCourtExpressData');
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Restore input values
+                Object.keys(data).forEach(key => {
+                    if (key !== 'powerModulesState' && key !== 'captainCommand' && key !== 'crewRoleStats') {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                // Restore power modules state
+                if (data.powerModulesState) {
+                    data.powerModulesState.forEach(moduleState => {
+                        const module = document.getElementById(moduleState.id);
+                        if (module) {
+                            if (moduleState.active) {
+                                module.classList.add('active');
+                            } else {
+                                module.classList.remove('active');
+                            }
+                        }
+                    });
+                    
+                    // Update active modules counter
+                    updateActiveModulesCount();
+                }
+                
+                // Restore captain command selection
+                if (data.captainCommand !== undefined && data.captainCommand !== -1) {
+                    const commandOptions = document.querySelectorAll('.command-option');
+                    if (commandOptions.length > data.captainCommand) {
+                        commandOptions[data.captainCommand].classList.add('selected');
+                    }
+                }
+                
+                // Restore crew role stats
+                if (data.crewRoleStats) {
+                    const roles = ['captain', 'helmsman', 'gunner', 'boatswain'];
+                    
+                    roles.forEach(role => {
+                        if (data.crewRoleStats[role]) {
+                            // Create stats container if it doesn't exist
+                            let statsDiv = document.getElementById(`${role}Stats`);
+                            if (!statsDiv) {
+                                statsDiv = document.createElement('div');
+                                statsDiv.id = `${role}Stats`;
+                                
+                                // Add to the crew role section
+                                const roleSection = document.querySelector(`.crew-role input#${role}Player`).parentElement;
+                                roleSection.appendChild(statsDiv);
+                            }
+                            
+                            // Set the HTML content
+                            statsDiv.innerHTML = data.crewRoleStats[role];
+                            
+                            // Add clear button
+                            addClearButton(role);
+                        }
+                    });
+                }
+                
+                // Update crew count
+                updateCrewCount();
+            }
+        }
+        
+        // Add file import functionality
+        function addImportButton() {
+            const saveContainer = document.querySelector('.save-container');
+            
+            const importBtn = document.createElement('button');
+            importBtn.className = 'save-btn';
+            importBtn.style.backgroundColor = '#0277bd';
+            importBtn.style.marginRight = '10px';
+            importBtn.textContent = 'IMPORT SHEET';
+            importBtn.onclick = function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = function(event) {
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+                            loadFromLocalStorage();
+                            alert('Ship data imported successfully!');
+                        } catch (error) {
+                            alert('Error importing file: ' + error.message);
+                        }
+                    };
+                    
+                    reader.readAsText(file);
+                };
+                
+                input.click();
+            };
+            
+            saveContainer.prepend(importBtn);
+        }
+        
+        // Initialize the sheet
+        window.onload = function() {
+            loadFromLocalStorage();
+            addImportButton();
+            
+            // Set event listeners for all editable elements to save on change
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    // If it's a crew number input, update crew count
+                    if (input.classList.contains('crew-number')) {
+                        updateCrewCount();
+                    }
+                    
+                    // If it's the available power charges input, update max modules
+                    if (input.id === 'availablePowerCharges') {
+                        document.getElementById('maxModules').textContent = input.value;
+                    }
+                    
+                    saveToLocalStorage();
+                });
+            });
+            
+            // Initialize crew count
+            updateCrewCount();
+            
+            // Initialize active modules counter
+            updateActiveModulesCount();
+        };
+        
+        // Save to local storage on any change
+        function saveToLocalStorage() {
+            // Get all input fields and their values
+            const inputs = document.querySelectorAll('input, select');
+            const data = {};
+            
+            inputs.forEach(input => {
+                if (input.id) {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            // Save active power modules
+            const powerModules = document.querySelectorAll('.power-module');
+            data['powerModulesState'] = Array.from(powerModules).map(module => {
+                return {
+                    id: module.id,
+                    active: module.classList.contains('active')
+                };
+            });
+            
+            // Save captain command selection
+            const commandOptions = document.querySelectorAll('.command-option');
+            data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
+            
+            // Save crew role stats
+            const roles = ['captain', 'helmsman', 'gunner', 'boatswain'];
+            data['crewRoleStats'] = {};
+            
+            roles.forEach(role => {
+                const statsElement = document.getElementById(`${role}Stats`);
+                if (statsElement) {
+                    data['crewRoleStats'][role] = statsElement.innerHTML;
+                }
+            });
+            
+            // Save to local storage
+            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+        }
+        
+        // Process the uploaded character JSON file
+        function handleFileUpload(input, role) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const characterData = JSON.parse(e.target.result);
+                    
+                    // Validate that this is a Foundry VTT character sheet
+                    if (!validateCharacterSheet(characterData)) {
+                        showNotification('Invalid character sheet. Please upload a Foundry VTT character sheet.', true);
+                        return;
+                    }
+                    
+                    // Process based on crew role
+                    switch(role) {
+                        case 'captain':
+                            processCaptainData(characterData);
+                            break;
+                        case 'helmsman':
+                            processHelmsmanData(characterData);
+                            break;
+                        case 'gunner':
+                            processGunnerData(characterData);
+                            break;
+                        case 'boatswain':
+                            processBoatswainData(characterData);
+                            break;
+                    }
+                    
+                    // Add a clear button if not already present
+                    addClearButton(role);
+                    
+                    // Save to local storage
+                    saveToLocalStorage();
+                    
+                    // Show success notification
+                    showNotification(`${characterData.name} successfully assigned as ${role.charAt(0).toUpperCase() + role.slice(1)}!`);
+                    
+                } catch (error) {
+                    console.error('Error processing character sheet:', error);
+                    showNotification('Error processing character sheet. Is this a valid JSON file?', true);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        // Validate that the uploaded file is a Foundry VTT character sheet
+        function validateCharacterSheet(data) {
+            // Check for essential properties that should exist in a Foundry character sheet
+            return data && 
+                   data.name && 
+                   data.type === "character" && 
+                   data.system && 
+                   data.system.abilities;
+        }
+        
+        // Process Captain character data
+        function processCaptainData(characterData) {
+            // Extract name
+            document.getElementById('captainPlayer').value = characterData.name;
+            
+            // Extract Charisma modifier + proficiency for grapple checks
+            const charMod = getAbilityModifier(characterData.system.abilities.cha.value);
+            const profBonus = getProficiencyBonus(characterData);
+            
+            // Extract initiative modifier
+            let initiativeModifier = getAbilityModifier(characterData.system.abilities.dex.value);
+            if (characterData.system.attributes.init.bonus) {
+                const bonusMatch = characterData.system.attributes.init.bonus.match(/[+-]?\d+/);
+                if (bonusMatch) {
+                    initiativeModifier += parseInt(bonusMatch[0]);
+                }
+            }
+            
+            // Set ship's initiative
+            const initiativeDisplay = (initiativeModifier >= 0) ? `+${initiativeModifier}` : initiativeModifier;
+            document.getElementById('shipInitiative').value = initiativeDisplay;
+            
+            // Display captain's stats
+            const captainStatsHtml = `
+                <div class="crew-role-stat">Initiative: ${initiativeDisplay}</div>
+                <div class="crew-role-stat">Charisma: ${charMod >= 0 ? '+' : ''}${charMod}</div>
+                <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
+                <div class="crew-role-stat">Grapple Check: ${(charMod + profBonus) >= 0 ? '+' : ''}${charMod + profBonus}</div>
+            `;
+            addStatsDisplay('captain', captainStatsHtml);
+        }
+        
+        // Process Helmsman character data
+        function processHelmsmanData(characterData) {
+            // Extract name
+            document.getElementById('helmsmanPlayer').value = characterData.name;
+            
+            // Extract Wisdom modifier + proficiency for vehicle checks
+            const wisMod = getAbilityModifier(characterData.system.abilities.wis.value);
+            const profBonus = getProficiencyBonus(characterData);
+            
+            // Check for vehicle proficiency
+            let isVehicleProficient = false;
+            if (characterData.system.tools && characterData.system.tools.vehicle && characterData.system.tools.vehicle.value > 0) {
+                isVehicleProficient = true;
+            }
+            
+            // Calculate vehicle check bonus
+            const vehicleCheckBonus = wisMod + (isVehicleProficient ? profBonus : 0);
+            
+            // Display helmsman's stats
+            const helmsmanStatsHtml = `
+                <div class="crew-role-stat">Wisdom: ${wisMod >= 0 ? '+' : ''}${wisMod}</div>
+                <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
+                <div class="crew-role-stat">Vehicle ${isVehicleProficient ? '(Proficient)' : ''}: ${vehicleCheckBonus >= 0 ? '+' : ''}${vehicleCheckBonus}</div>
+            `;
+            addStatsDisplay('helmsman', helmsmanStatsHtml);
+        }
+        
+        // Process Gunner character data
+        function processGunnerData(characterData) {
+            // Extract name
+            document.getElementById('gunnerPlayer').value = characterData.name;
+            
+            // Extract Dexterity modifier + proficiency for weapon attacks
+            const dexMod = getAbilityModifier(characterData.system.abilities.dex.value);
+            const profBonus = getProficiencyBonus(characterData);
+            
+            // Calculate weapon attack bonus
+            const attackBonus = dexMod + profBonus;
+            const attackDisplay = (attackBonus >= 0) ? `+${attackBonus}` : attackBonus;
+            
+            // Update all weapon to-hit values
+            document.getElementById('rightCannonToHit').value = attackDisplay;
+            document.getElementById('leftCannonToHit').value = attackDisplay;
+            document.getElementById('carronadeToHit').value = attackDisplay;
+            
+            // Assign gunner to first unassigned weapon
+            if (!document.getElementById('rightCannonGunner').value) {
+                document.getElementById('rightCannonGunner').value = characterData.name;
+            } else if (!document.getElementById('leftCannonGunner').value) {
+                document.getElementById('leftCannonGunner').value = characterData.name;
+            } else if (!document.getElementById('carronadeGunner').value) {
+                document.getElementById('carronadeGunner').value = characterData.name;
+            }
+            
+            // Display gunner's stats
+            const gunnerStatsHtml = `
+                <div class="crew-role-stat">Dexterity: ${dexMod >= 0 ? '+' : ''}${dexMod}</div>
+                <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
+                <div class="crew-role-stat">Attack Bonus: ${attackDisplay}</div>
+            `;
+            addStatsDisplay('gunner', gunnerStatsHtml);
+        }
+        
+        // Process Boatswain character data
+        function processBoatswainData(characterData) {
+            // Extract name
+            document.getElementById('boatswainPlayer').value = characterData.name;
+            
+            // Extract proficiency bonus
+            const profBonus = getProficiencyBonus(characterData);
+            
+            // Update available power charges
+            document.getElementById('availablePowerCharges').value = profBonus;
+            document.getElementById('maxModules').textContent = profBonus;
+            
+            // Display boatswain's stats
+            const boatswainStatsHtml = `
+                <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
+                <div class="crew-role-stat">Available Power Charges: ${profBonus}</div>
+            `;
+            addStatsDisplay('boatswain', boatswainStatsHtml);
+        }
+        
+        // Helper function to calculate ability modifier from ability score
+        function getAbilityModifier(abilityScore) {
+            return Math.floor((abilityScore - 10) / 2);
+        }
+        
+        // Helper function to get proficiency bonus from character data
+        function getProficiencyBonus(characterData) {
+            // In Foundry, proficiency bonus is often calculated based on level
+            // For a level 1 character, prof bonus is 2, then increases by 1 every 4 levels
+            let level = 1; // Default to level 1
+            
+            // Try to extract level from character data
+            if (characterData.system.details && characterData.system.details.level) {
+                level = characterData.system.details.level;
+            } else if (characterData.system.levels) {
+                level = characterData.system.levels;
+            }
+            
+            // Calculate proficiency bonus
+            return Math.floor((level - 1) / 4) + 2;
+        }
+        
+        // Show notification
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            if (isError) {
+                notification.classList.add('error');
+            } else {
+                notification.classList.remove('error');
+            }
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Add or update stats display for a crew role
+        function addStatsDisplay(role, statsHtml) {
+            // Check if stats display already exists
+            const existingStats = document.getElementById(`${role}Stats`);
+            if (existingStats) {
+                existingStats.innerHTML = statsHtml;
+            } else {
+                // Create new stats display
+                const statsDiv = document.createElement('div');
+                statsDiv.id = `${role}Stats`;
+                statsDiv.innerHTML = statsHtml;
+                
+                // Add to the crew role section
+                const roleSection = document.querySelector(`.crew-role input#${role}Player`).parentElement;
+                roleSection.appendChild(statsDiv);
+            }
+        }
+        
+        // Add clear button to remove character data
+        function addClearButton(role) {
+            // Check if clear button already exists
+            if (document.getElementById(`${role}ClearBtn`)) {
+                return;
+            }
+            
+            // Create clear button
+            const clearBtn = document.createElement('button');
+            clearBtn.id = `${role}ClearBtn`;
+            clearBtn.className = 'clear-btn';
+            clearBtn.textContent = '✕';
+            clearBtn.title = 'Clear character data';
+            clearBtn.onclick = function() {
+                clearCharacterData(role);
+            };
+            
+            // Add to the crew role section
+            const roleInput = document.getElementById(`${role}Player`);
+            roleInput.parentNode.appendChild(clearBtn);
+        }
+        
+        // Clear character data
+        function clearCharacterData(role) {
+            // Reset input
+            document.getElementById(`${role}Player`).value = '';
+            
+            // Remove stats display
+            const statsDisplay = document.getElementById(`${role}Stats`);
+            if (statsDisplay) {
+                statsDisplay.remove();
+            }
+            
+            // Remove clear button
+            const clearBtn = document.getElementById(`${role}ClearBtn`);
+            if (clearBtn) {
+                clearBtn.remove();
+            }
+            
+            // Role-specific resets
+            switch(role) {
+                case 'captain':
+                    document.getElementById('shipInitiative').value = '+0';
+                    break;
+                case 'helmsman':
+                    // Reset helmsman-specific values
+                    break;
+                case 'gunner':
+                    // Reset gunner from weapons
+                    const gunnerName = document.getElementById('gunnerPlayer').value;
+                    if (document.getElementById('rightCannonGunner').value === gunnerName) {
+                        document.getElementById('rightCannonGunner').value = '';
+                    }
+                    if (document.getElementById('leftCannonGunner').value === gunnerName) {
+                        document.getElementById('leftCannonGunner').value = '';
+                    }
+                    if (document.getElementById('carronadeGunner').value === gunnerName) {
+                        document.getElementById('carronadeGunner').value = '';
+                    }
+                    break;
+                case 'boatswain':
+                    document.getElementById('availablePowerCharges').value = '4';
+                    document.getElementById('maxModules').textContent = '4';
+                    break;
+            }
+            
+            // Save changes
+            saveToLocalStorage();
+            
+            // Show notification
+            showNotification(`${role.charAt(0).toUpperCase() + role.slice(1)} data cleared`);
+        }
+    </script>
+</body>
+</html>
+
