@@ -1739,6 +1739,11 @@
             const roleInput = document.getElementById(`${role}Player`);
             roleInput.parentNode.appendChild(clearBtn);
         }
+
+        // Trigger the file upload input
+        function triggerFileUpload(role) {
+            document.getElementById(role + 'FileUpload').click();
+        }
         
         // Clear character data
         function clearCharacterData(role) {
