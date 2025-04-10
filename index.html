@@ -603,6 +603,76 @@
             opacity: 1;
         }
 
+        /* File upload button styles */
+        .file-upload-label {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--secondary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: all 0.2s;
+        }
+
+        .file-upload-label:hover {
+            background-color: #1a5b8c;
+        }
+
+        .file-upload-label span {
+            margin-left: 5px;
+        }
+
+        .file-upload-input {
+            display: none;
+        }
+
+        .crew-role {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .crew-role-name {
+            min-width: 100px;
+            margin-right: 10px;
+        }
+
+        .crew-role-player {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            flex-grow: 1;
+        }
+
+        .gunner-dropdown {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        .maneuver {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--light);
+            border-radius: 5px;
+        }
+
+        .maneuver-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .maneuver-level {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            font-weight: normal;
+        }
+
         @media print {
             body {
                 background-color: white;
@@ -613,6 +683,10 @@
             }
             
             .save-container {
+                display: none;
+            }
+
+            .file-upload-label {
                 display: none;
             }
         }
@@ -732,18 +806,42 @@
                         <div class="crew-role">
                             <div class="crew-role-name">Captain:</div>
                             <input type="text" class="crew-role-player" id="captainPlayer" placeholder="Player name...">
+                            <label class="file-upload-label">
+                                <input type="file" class="file-upload-input" id="captainUpload" accept=".json" onchange="handleFileUpload(event, 'captain')">
+                                <i>📄</i><span>Upload</span>
+                            </label>
                         </div>
                         <div class="crew-role">
                             <div class="crew-role-name">Helmsman:</div>
                             <input type="text" class="crew-role-player" id="helmsmanPlayer" placeholder="Player name...">
+                            <label class="file-upload-label">
+                                <input type="file" class="file-upload-input" id="helmsmanUpload" accept=".json" onchange="handleFileUpload(event, 'helmsman')">
+                                <i>📄</i><span>Upload</span>
+                            </label>
                         </div>
                         <div class="crew-role">
                             <div class="crew-role-name">Gunner:</div>
                             <input type="text" class="crew-role-player" id="gunnerPlayer" placeholder="Player name...">
+                            <label class="file-upload-label">
+                                <input type="file" class="file-upload-input" id="gunnerUpload" accept=".json" onchange="handleFileUpload(event, 'gunner')">
+                                <i>📄</i><span>Upload</span>
+                            </label>
+                        </div>
+                        <div class="crew-role">
+                            <div class="crew-role-name">Gunner 2:</div>
+                            <input type="text" class="crew-role-player" id="gunner2Player" placeholder="Player name...">
+                            <label class="file-upload-label">
+                                <input type="file" class="file-upload-input" id="gunner2Upload" accept=".json" onchange="handleFileUpload(event, 'gunner2')">
+                                <i>📄</i><span>Upload</span>
+                            </label>
                         </div>
                         <div class="crew-role">
                             <div class="crew-role-name">Boatswain:</div>
                             <input type="text" class="crew-role-player" id="boatswainPlayer" placeholder="Player name...">
+                            <label class="file-upload-label">
+                                <input type="file" class="file-upload-input" id="boatswainUpload" accept=".json" onchange="handleFileUpload(event, 'boatswain')">
+                                <i>📄</i><span>Upload</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -903,7 +1001,11 @@
                             <div class="weapon-property">HP: <input type="number" style="width: 30px; display: inline-block;" value="10" max="10" min="0" id="rightCannonHP"></div>
                         </div>
                         <div>
-                            <input type="text" style="width: 120px;" placeholder="Gunner name..." id="rightCannonGunner">
+                            <select class="gunner-dropdown" id="rightCannonGunner">
+                                <option value="">Select Gunner...</option>
+                                <option value="gunner">Primary Gunner</option>
+                                <option value="gunner2">Secondary Gunner</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -920,7 +1022,11 @@
                             <div class="weapon-property">HP: <input type="number" style="width: 30px; display: inline-block;" value="10" max="10" min="0" id="leftCannonHP"></div>
                         </div>
                         <div>
-                            <input type="text" style="width: 120px;" placeholder="Gunner name..." id="leftCannonGunner">
+                            <select class="gunner-dropdown" id="leftCannonGunner">
+                                <option value="">Select Gunner...</option>
+                                <option value="gunner">Primary Gunner</option>
+                                <option value="gunner2">Secondary Gunner</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -941,7 +1047,11 @@
                             </div>
                         </div>
                         <div>
-                            <input type="text" style="width: 120px;" placeholder="Gunner name..." id="carronadeGunner">
+                            <select class="gunner-dropdown" id="carronadeGunner">
+                                <option value="">Select Gunner...</option>
+                                <option value="gunner">Primary Gunner</option>
+                                <option value="gunner2">Secondary Gunner</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -1065,293 +1175,3 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // Toggle power module activation
-        function togglePowerModule(module) {
-            // Check if we're activating or deactivating
-            const activating = !module.classList.contains('active');
-            
-            if (activating) {
-                // Check if we have enough power charges
-                const availableCharges = parseInt(document.getElementById('availablePowerCharges').value);
-                const activeModules = document.querySelectorAll('.power-module.active').length;
-                const maxModules = availableCharges;
-                
-                // Update max modules display
-                document.getElementById('maxModules').textContent = maxModules;
-                
-                // Check if we can activate more modules
-                if (activeModules >= maxModules) {
-                    // Visual error indication instead of alert
-                    module.classList.add('error');
-                    setTimeout(() => {
-                        module.classList.remove('error');
-                    }, 500);
-                    return;
-                }
-                
-                // Check module cost
-                const moduleCost = parseInt(module.getAttribute('data-cost'));
-                if (activeModules + moduleCost > maxModules) {
-                    // Visual error indication
-                    module.classList.add('error');
-                    setTimeout(() => {
-                        module.classList.remove('error');
-                    }, 500);
-                    return;
-                }
-            }
-            
-            // Toggle active state
-            module.classList.toggle('active');
-            
-            // Update active modules counter
-            updateActiveModulesCount();
-            
-            saveToLocalStorage();
-        }
-        
-        // Toggle captain command selection
-        function selectCommand(option, type) {
-            // Remove selected class from all options
-            document.querySelectorAll('.command-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked option
-            option.classList.add('selected');
-            saveToLocalStorage();
-        }
-        
-        // Update active modules counter
-        function updateActiveModulesCount() {
-            const activeModules = document.querySelectorAll('.power-module.active').length;
-            document.getElementById('activeModulesCount').textContent = activeModules;
-        }
-        
-        // Update crew count and daily cost
-        function updateCrewCount() {
-            // Get all player characters (minimum 5)
-            const playerCharacters = 5;
-            
-            // Get additional crew
-            let additionalCrew = 0;
-            let dailyCost = 0;
-            
-            document.querySelectorAll('.crew-number').forEach(input => {
-                const crewCount = parseInt(input.value);
-                const crewCost = parseFloat(input.getAttribute('data-cost'));
-                
-                additionalCrew += crewCount;
-                dailyCost += crewCount * crewCost;
-            });
-            
-            // Update display
-            const totalCrew = playerCharacters + additionalCrew;
-            document.getElementById('currentCrewCount').textContent = totalCrew;
-            document.getElementById('dailyCrewCost').textContent = dailyCost.toFixed(1) + ' gp';
-            
-            // Check if we're over max crew
-            if (totalCrew > 15) {
-                alert('Warning: You have exceeded the maximum crew capacity of 15!');
-            }
-        }
-        
-        // Sync velocity and direction between displays
-        function syncHelmsmanValues() {
-            // Sync current velocity
-            const currentVelocity = document.getElementById('currentVelocityHelm').value;
-            
-            // Sync current direction
-            const currentDirection = document.getElementById('currentDirectionHelm').value;
-        }
-        
-        // Save all editable content to local storage
-        function saveSheet() {
-            // Get all input fields and their values
-            const inputs = document.querySelectorAll('input, select');
-            const data = {};
-            
-            inputs.forEach(input => {
-                if (input.id) {
-                    data[input.id] = input.value;
-                }
-            });
-            
-            // Save active power modules
-            const powerModules = document.querySelectorAll('.power-module');
-            data['powerModulesState'] = Array.from(powerModules).map(module => {
-                return {
-                    id: module.id,
-                    active: module.classList.contains('active')
-                };
-            });
-            
-            // Save captain command selection
-            const commandOptions = document.querySelectorAll('.command-option');
-            data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
-            
-            // Save to local storage
-            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
-            
-            // Provide user feedback
-            alert('Ship data saved!');
-            
-            // Create a download option
-            const dataStr = JSON.stringify(data);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = 'OceansCourtExpress_' + new Date().toISOString().slice(0, 10) + '.json';
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        }
-        
-        // Load data from local storage on page load
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem('oceansCourtExpressData');
-            
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                
-                // Restore input values
-                Object.keys(data).forEach(key => {
-                    if (key !== 'powerModulesState' && key !== 'captainCommand') {
-                        const element = document.getElementById(key);
-                        if (element) {
-                            element.value = data[key];
-                        }
-                    }
-                });
-                
-                // Restore power modules state
-                if (data.powerModulesState) {
-                    data.powerModulesState.forEach(moduleState => {
-                        const module = document.getElementById(moduleState.id);
-                        if (module) {
-                            if (moduleState.active) {
-                                module.classList.add('active');
-                            } else {
-                                module.classList.remove('active');
-                            }
-                        }
-                    });
-                    
-                    // Update active modules counter
-                    updateActiveModulesCount();
-                }
-                
-                // Restore captain command selection
-                if (data.captainCommand !== undefined && data.captainCommand !== -1) {
-                    const commandOptions = document.querySelectorAll('.command-option');
-                    if (commandOptions.length > data.captainCommand) {
-                        commandOptions[data.captainCommand].classList.add('selected');
-                    }
-                }
-                
-                // Update crew count
-                updateCrewCount();
-            }
-        }
-        
-        // Add file import functionality
-        function addImportButton() {
-            const saveContainer = document.querySelector('.save-container');
-            
-            const importBtn = document.createElement('button');
-            importBtn.className = 'save-btn';
-            importBtn.style.backgroundColor = '#0277bd';
-            importBtn.style.marginRight = '10px';
-            importBtn.textContent = 'IMPORT SHEET';
-            importBtn.onclick = function() {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.json';
-                input.onchange = function(event) {
-                    const file = event.target.files[0];
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        try {
-                            const data = JSON.parse(e.target.result);
-                            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
-                            loadFromLocalStorage();
-                            alert('Ship data imported successfully!');
-                        } catch (error) {
-                            alert('Error importing file: ' + error.message);
-                        }
-                    };
-                    
-                    reader.readAsText(file);
-                };
-                
-                input.click();
-            };
-            
-            saveContainer.prepend(importBtn);
-        }
-        
-        // Initialize the sheet
-        window.onload = function() {
-            loadFromLocalStorage();
-            addImportButton();
-            
-            // Set event listeners for all editable elements to save on change
-            const inputs = document.querySelectorAll('input, select');
-            inputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    // If it's a crew number input, update crew count
-                    if (input.classList.contains('crew-number')) {
-                        updateCrewCount();
-                    }
-                    
-                    // If it's the available power charges input, update max modules
-                    if (input.id === 'availablePowerCharges') {
-                        document.getElementById('maxModules').textContent = input.value;
-                    }
-                    
-                    saveToLocalStorage();
-                });
-            });
-            
-            // Initialize crew count
-            updateCrewCount();
-            
-            // Initialize active modules counter
-            updateActiveModulesCount();
-        };
-        
-        // Save to local storage on any change
-        function saveToLocalStorage() {
-            // Get all input fields and their values
-            const inputs = document.querySelectorAll('input, select');
-            const data = {};
-            
-            inputs.forEach(input => {
-                if (input.id) {
-                    data[input.id] = input.value;
-                }
-            });
-            
-            // Save active power modules
-            const powerModules = document.querySelectorAll('.power-module');
-            data['powerModulesState'] = Array.from(powerModules).map(module => {
-                return {
-                    id: module.id,
-                    active: module.classList.contains('active')
-                };
-            });
-            
-            // Save captain command selection
-            const commandOptions = document.querySelectorAll('.command-option');
-            data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
-            
-            // Save to local storage
-            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
-        }
-    </script>
-</body>
-</html>
