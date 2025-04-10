@@ -6,14 +6,40 @@
     <title>Oceans Court Express - Ship Character Sheet</title>
     <style>
         :root {
+            /* Light mode variables */
             --primary: #1a3a5a;
             --secondary: #3d6a8a;
             --accent: #ffcc00;
+            --accent-purple: #9933ff;
+            --accent-pink: #ff33cc;
+            --accent-cyan: #00ccff;
             --light: #e1eef6;
             --dark: #0a1a2a;
             --danger: #d9534f;
             --success: #5cb85c;
             --warning: #f0ad4e;
+            --background: #f0f5f9;
+            --text: #0a1a2a;
+            --card-bg: white;
+            --border-color: rgba(0, 204, 255, 0.3);
+        }
+    
+        [data-theme="dark"] {
+            --primary: #4287f5;
+            --secondary: #7ab2ff;
+            --accent: #ff9900;
+            --accent-purple: #bf7fff;
+            --accent-pink: #ff7fcc;
+            --accent-cyan: #7fddff;
+            --light: #1a2a3a;
+            --dark: #e1eef6;
+            --danger: #ff5c5c;
+            --success: #5cff5c;
+            --warning: #ffad5c;
+            --background: #121820;
+            --text: #e1eef6;
+            --card-bg: #1a2a3a;
+            --border-color: rgba(0, 204, 255, 0.5);
         }
         
         * {
@@ -22,24 +48,26 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+    
         body {
-            background-color: #f0f5f9;
-            color: var(--dark);
+            background-color: var(--background);
+            color: var(--text);
             padding: 20px;
+            transition: all 0.3s ease;
         }
-
+    
         .sheet-container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
             padding: 20px;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
-
+    
         .watermark {
             position: absolute;
             top: 50%;
@@ -50,7 +78,7 @@
             z-index: 0;
             pointer-events: none;
         }
-
+    
         .sheet-header {
             display: flex;
             justify-content: space-between;
@@ -59,7 +87,7 @@
             position: relative;
             z-index: 1;
         }
-
+    
         .ship-name {
             font-size: 2.5rem;
             font-weight: bold;
@@ -67,18 +95,33 @@
             text-transform: uppercase;
             border-bottom: 2px solid var(--accent);
             margin-bottom: 5px;
+            font-family: 'Orbitron', 'Segoe UI', sans-serif;
+            text-shadow: 0 0 10px var(--accent-cyan);
+            letter-spacing: 2px;
         }
-
+    
+        .ship-name::after {
+            content: '|';
+            animation: blink 1s infinite step-end;
+            margin-left: 5px;
+            color: var(--accent-cyan);
+        }
+    
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    
         .ship-class {
             font-size: 1.2rem;
             color: var(--secondary);
             font-style: italic;
         }
-
+    
         .save-container {
             text-align: right;
         }
-
+    
         .save-btn {
             background-color: var(--success);
             color: white;
@@ -89,11 +132,13 @@
             font-weight: bold;
             transition: all 0.2s;
         }
-
+    
         .save-btn:hover {
             background-color: #4cae4c;
             transform: translateY(-2px);
+            box-shadow: 0 0 10px var(--success);
         }
+        
         .crew-role-input-group {
             display: flex;
             align-items: center;
@@ -115,6 +160,7 @@
         .upload-btn:hover {
             background-color: var(--primary);
             transform: translateY(-2px);
+            box-shadow: 0 0 10px currentColor;
         }
         
         .captain-upload {
@@ -173,25 +219,52 @@
             color: var(--secondary);
             margin-top: 5px;
         }
-
+    
         .grid-container {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
             gap: 15px;
             position: relative;
             z-index: 1;
+            background-image: linear-gradient(rgba(0,204,255,0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,204,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-
+    
         .section {
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 15px;
             border-top: 4px solid var(--primary);
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--border-color);
+            border-top-width: 4px;
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.1);
         }
-
+    
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--accent-cyan) 50%, 
+                transparent 100%);
+            opacity: 0.7;
+            animation: scanner 3s infinite;
+            z-index: 1;
+        }
+    
+        @keyframes scanner {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    
         .section-title {
             font-size: 1.2rem;
             font-weight: bold;
@@ -200,47 +273,108 @@
             display: flex;
             align-items: center;
         }
-
+    
         .section-title i {
             margin-right: 8px;
             color: var(--accent);
+            text-shadow: 0 0 5px var(--accent);
         }
-
+    
+        .captain .section-title i {
+            color: var(--accent-purple);
+        }
+    
+        .helmsman .section-title i {
+            color: var(--accent-cyan);
+        }
+    
+        .gunner .section-title i {
+            color: var(--accent-pink);
+        }
+    
+        .boatswain .section-title i {
+            color: var(--accent);
+        }
+    
         .ship-stats {
             grid-column: span 12;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            background: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0, 204, 255, 0.05) 100%);
         }
-
+    
         .stats-container {
-            /* For the left side of ship stats */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
+    
+        .fixed-ship-stats {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            z-index: 999;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+            transition: transform 0.3s ease;
+        }
+    
+        .fixed-ship-stats.visible {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+    
+        .fixed-stat {
+            display: flex;
+            align-items: center;
+        }
+    
+        .fixed-label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: var(--secondary);
+        }
+    
+        .fixed-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+    
         .crew-container {
             /* For the right side of ship stats (crew details) */
         }
-
+    
         .captain {
             grid-column: span 6;
             border-top-color: #6a1b9a;
         }
-
+    
         .helmsman {
             grid-column: span 6;
             border-top-color: #0277bd;
         }
-
+    
         .gunner {
             grid-column: span 12;
             border-top-color: #d32f2f;
         }
-
+    
         .boatswain {
             grid-column: span 12;
             border-top-color: #388e3c;
         }
-
+    
         .role-badge {
             position: absolute;
             top: 15px;
@@ -250,43 +384,45 @@
             color: white;
             font-weight: bold;
             font-size: 0.8rem;
+            border: 1px solid currentColor;
+            text-shadow: 0 0 5px currentColor;
         }
-
+    
         .captain .role-badge {
             background-color: #6a1b9a;
         }
-
+    
         .helmsman .role-badge {
             background-color: #0277bd;
         }
-
+    
         .gunner .role-badge {
             background-color: #d32f2f;
         }
-
+    
         .boatswain .role-badge {
             background-color: #388e3c;
         }
-
+    
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
-
+    
         .stat-block {
             background-color: var(--light);
             padding: 10px;
             border-radius: 5px;
         }
-
+    
         .stat-label {
             font-size: 0.8rem;
             color: var(--secondary);
             display: block;
             margin-bottom: 5px;
         }
-
+    
         .stat-value {
             font-size: 1.3rem;
             font-weight: bold;
@@ -295,78 +431,99 @@
             background: transparent;
             border: none;
             text-align: center;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px var(--accent-cyan);
         }
-
+    
         .stat-value:focus {
             outline: 2px solid var(--accent);
             border-radius: 3px;
         }
-
+    
         .initiative-container {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 15px 0;
         }
-
+    
         .initiative-label {
             font-weight: bold;
             color: var(--secondary);
             margin-right: 10px;
         }
-
+    
         .initiative-value {
             width: 60px;
             padding: 5px;
             text-align: center;
             font-weight: bold;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 5px;
+            background-color: var(--light);
+            color: var(--dark);
+            font-family: 'Courier New', monospace;
         }
-
+    
         .ability-list {
             margin-top: 15px;
         }
-
+    
         .ability-item {
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px dashed #e1e1e1;
+            border-bottom: 1px dashed var(--border-color);
         }
-
+    
         .ability-name {
             font-weight: bold;
             margin-bottom: 3px;
             color: var(--primary);
         }
-
+    
         .ability-desc {
             font-size: 0.9rem;
-            color: #555;
+            color: var(--text);
         }
-
+    
+        .maneuver {
+            margin-bottom: 15px;
+        }
+    
+        .maneuver-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+    
+        .maneuver-level {
+            font-size: 0.9rem;
+            color: #777;
+            font-weight: normal;
+        }
+    
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-
+    
         th {
             background-color: var(--primary);
             color: white;
             text-align: left;
             padding: 10px;
         }
-
+    
         td {
             padding: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
-
+    
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: rgba(0, 204, 255, 0.03);
         }
-
+    
         .weapon-property {
             display: inline-block;
             background-color: var(--light);
@@ -377,7 +534,7 @@
             margin-right: 5px;
             margin-top: 5px;
         }
-
+    
         .power-module {
             background-color: var(--light);
             padding: 10px;
@@ -394,17 +551,18 @@
         .power-module.active {
             background-color: rgba(56, 142, 60, 0.15);
             border-left-color: #388e3c;
+            box-shadow: 0 0 10px var(--accent);
         }
-
+    
         .power-module:hover {
             transform: translateX(5px);
         }
-
+    
         .power-module.error {
             animation: shake 0.5s;
             border-left-color: var(--danger);
         }
-
+    
         @keyframes shake {
             0% { transform: translateX(0); }
             20% { transform: translateX(-10px); }
@@ -413,11 +571,11 @@
             80% { transform: translateX(10px); }
             100% { transform: translateX(0); }
         }
-
+    
         .power-info {
             flex: 1;
         }
-
+    
         .power-name {
             font-weight: bold;
             color: var(--primary);
@@ -425,7 +583,7 @@
             align-items: center;
             justify-content: space-between;
         }
-
+    
         .power-cost {
             background-color: var(--secondary);
             color: white;
@@ -434,19 +592,19 @@
             font-size: 0.8rem;
             margin-left: 8px;
         }
-
+    
         .power-hp {
             margin-left: 15px;
             font-size: 0.9rem;
-            color: #555;
+            color: var(--text);
         }
-
+    
         .power-desc {
             font-size: 0.9rem;
             margin-top: 5px;
-            color: #555;
+            color: var(--text);
         }
-
+    
         .power-toggle {
             width: 40px;
             height: 20px;
@@ -455,7 +613,7 @@
             position: relative;
             transition: all 0.2s ease;
         }
-
+    
         .power-toggle::after {
             content: '';
             width: 16px;
@@ -467,40 +625,41 @@
             left: 2px;
             transition: all 0.2s ease;
         }
-
+    
         .power-module.active .power-toggle {
             background-color: #388e3c;
         }
-
+    
         .power-module.active .power-toggle::after {
             left: 22px;
         }
-
+    
         .command-options {
             display: flex;
             margin-top: 10px;
             gap: 10px;
             flex-direction: column;
         }
-
+    
         .command-option {
             padding: 10px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border-color);
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.2s;
         }
-
+    
         .command-option.selected {
-            border-color: #6a1b9a;
-            background-color: rgba(106, 27, 154, 0.1);
+            border-color: var(--accent-purple);
+            background-color: rgba(153, 51, 255, 0.1);
+            box-shadow: 0 0 10px var(--accent-purple);
         }
-
+    
         .crew-table {
             width: 100%;
             margin-top: 15px;
         }
-
+    
         .crew-table th {
             background-color: var(--secondary);
             color: white;
@@ -508,111 +667,115 @@
             padding: 8px;
             font-size: 0.9rem;
         }
-
+    
         .crew-table td {
             padding: 8px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
             font-size: 0.9rem;
         }
-
+    
         .crew-count {
             display: flex;
             align-items: center;
             margin-top: 10px;
         }
-
+    
         .crew-count-label {
             font-weight: bold;
             margin-right: 10px;
         }
-
+    
         .crew-count-value {
             background-color: var(--light);
             padding: 5px 15px;
             border-radius: 5px;
             font-weight: bold;
         }
-
+    
         .movement-details {
             margin-top: 15px;
             padding: 15px;
             background-color: var(--light);
             border-radius: 5px;
         }
-
+    
         .movement-item {
             margin-bottom: 10px;
             display: flex;
             align-items: center;
         }
-
+    
         .movement-label {
             font-weight: bold;
             color: var(--secondary);
             min-width: 160px;
         }
-
+    
         .movement-value {
             font-weight: bold;
         }
-
+    
         .movement-note {
             font-size: 0.8rem;
-            color: #777;
+            color: var(--text);
             margin-left: 10px;
             font-style: italic;
         }
-
+    
         .weapon-row {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 10px;
             padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
             align-items: center;
         }
-
+    
         .weapon-header {
             font-weight: bold;
             color: var(--secondary);
             font-size: 0.9rem;
         }
-
+    
         .weapon-property-container {
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
         }
-
+    
         .number-input {
             width: 60px;
             text-align: center;
             padding: 5px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 3px;
+            background-color: var(--light);
+            color: var(--dark);
         }
-
+    
         .power-charge-container {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 15px;
         }
-
+    
         .power-charge-label {
             font-weight: bold;
             color: var(--secondary);
         }
-
+    
         .power-charge-input {
             width: 60px;
             padding: 5px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 3px;
             text-align: center;
             font-weight: bold;
+            background-color: var(--light);
+            color: var(--dark);
         }
-
+    
         .active-modules-counter {
             background-color: var(--secondary);
             color: white;
@@ -621,20 +784,20 @@
             font-size: 0.9rem;
             margin-left: 10px;
         }
-
+    
         .hp-display {
             display: flex;
             align-items: center;
         }
-
+    
         .hp-current {
             margin-right: 2px;
         }
-
+    
         .hp-max {
             margin-left: 2px;
         }
-
+    
         /* Tooltip styles */
         .tooltip {
             position: relative;
@@ -642,12 +805,12 @@
             margin-left: 5px;
             cursor: help;
         }
-
+    
         .tooltip i {
             color: var(--secondary);
             font-size: 0.8rem;
         }
-
+    
         .tooltip .tooltip-text {
             visibility: hidden;
             width: 200px;
@@ -665,7 +828,7 @@
             transition: opacity 0.3s;
             font-size: 0.8rem;
         }
-
+    
         .tooltip .tooltip-text::after {
             content: "";
             position: absolute;
@@ -676,19 +839,70 @@
             border-style: solid;
             border-color: var(--dark) transparent transparent transparent;
         }
-
+    
         .tooltip:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
         }
-
+    
         select {
             padding: 5px;
             border-radius: 3px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             width: 120px;
+            background-color: var(--light);
+            color: var(--dark);
         }
-
+    
+        /* Dark mode toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 25px;
+            background-color: var(--light);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            background-color: var(--primary);
+            transition: all 0.3s ease;
+        }
+    
+        [data-theme="dark"] .theme-toggle::after {
+            left: 27px;
+        }
+    
+        /* Cyberpunk style grid lines */
+        .section {
+            position: relative;
+        }
+    
+        .section::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            border-right: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            opacity: 0.5;
+            border-bottom-right-radius: 5px;
+        }
+    
         @media print {
             body {
                 background-color: white;
@@ -698,13 +912,32 @@
                 box-shadow: none;
             }
             
-            .save-container {
+            .save-container, .theme-toggle {
                 display: none;
             }
         }
     </style>
 </head>
 <body>
+    <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode"></div>
+    <div class="fixed-ship-stats" id="fixedStats">
+        <div class="fixed-stat">
+            <div class="fixed-label">Ship:</div>
+            <div class="fixed-value" id="fixedShipName">Oceans Court Express</div>
+        </div>
+        <div class="fixed-stat">
+            <div class="fixed-label">AC:</div>
+            <div class="fixed-value" id="fixedAC">16</div>
+        </div>
+        <div class="fixed-stat">
+            <div class="fixed-label">HP:</div>
+            <div class="fixed-value" id="fixedHP">100/100</div>
+        </div>
+        <div class="fixed-stat">
+            <div class="fixed-label">Temp HP:</div>
+            <div class="fixed-value" id="fixedTempHP">0</div>
+        </div>
+    </div>
     <div id="notification" class="notification">Character uploaded successfully!</div>
     <div class="sheet-container">
         <img src="/api/placeholder/800/600" alt="Ship Silhouette" class="watermark">
@@ -955,26 +1188,29 @@
                     </div>
                 </div>
                 
-                <div class="maneuver">
-                    <div class="maneuver-title">Overdrive <span class="maneuver-level">(Special Action)</span></div>
-                    <div class="ability-desc">Triple maximum acceleration, but requires a Charisma (Vehicle) check (<span id="helmsmanCheckBonus">+0</span>). On failure, acceleration capability is zero on your next turn.</div>
+                <div class="ability-list">
+                    <h3 style="margin-top: 15px; color: #0277bd;">Special Actions</h3>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Overdrive <span style="font-size: 0.9rem; color: #777;">(Special Action)</span></div>
+                        <div class="ability-desc">Triple maximum acceleration, but requires a Charisma (Vehicle) check (<span id="helmsmanCheckBonus">+0</span>). On failure, acceleration capability is zero on your next turn.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Emergency Brake <span style="font-size: 0.9rem; color: #777;">(Special Action)</span></div>
+                        <div class="ability-desc">Triple normal deceleration limit. Requires a Charisma (Vehicle) check (<span id="helmsmanCheckBonus2">+0</span>). On failure, the ship takes 2d6 force damage.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Maneuver - Evade <span style="font-size: 0.9rem; color: #777;">(1st-level)</span></div>
+                        <div class="ability-desc">As a reaction, expend a 1st-level spell slot to add proficiency bonus to ship's AC or Charisma (Vehicle) checks until your next turn.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Maneuver - Jamming <span style="font-size: 0.9rem; color: #777;">(3rd-level)</span></div>
+                        <div class="ability-desc">Expend a 3rd-level spell slot to match speed and acceleration of a target vessel within 5 feet for 1 minute.</div>
+                    </div>
                 </div>
-                
-                <div class="maneuver">
-                    <div class="maneuver-title">Emergency Brake <span class="maneuver-level">(Special Action)</span></div>
-                    <div class="ability-desc">Triple normal deceleration limit. Requires a Charisma (Vehicle) check (<span id="helmsmanCheckBonus2">+0</span>). On failure, the ship takes 2d6 force damage.</div>
-                </div>
-                
-                <div class="maneuver">
-                    <div class="maneuver-title">Maneuver - Evade <span class="maneuver-level">(1st-level)</span></div>
-                    <div class="ability-desc">As a reaction, expend a 1st-level spell slot to add proficiency bonus to ship's AC or Wisdom (Vehicle) checks until your next turn.</div>
-                </div>
-                
-                <div class="maneuver">
-                    <div class="maneuver-title">Maneuver - Jamming <span class="maneuver-level">(3rd-level)</span></div>
-                    <div class="ability-desc">Expend a 3rd-level spell slot to match speed and acceleration of a target vessel within 5 feet for 1 minute.</div>
-                </div>
-            </div>
             
             <!-- Gunner Section with Weapons -->
             <div class="section gunner">
@@ -1189,6 +1425,50 @@
     </div>
 
     <script>
+        // Toggle dark mode
+        function toggleDarkMode() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+    
+        // Initialize theme from local storage
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        }
+    
+        // Handle fixed header visibility
+        function handleFixedHeader() {
+            const statsContainer = document.querySelector('.stats-container');
+            const fixedStats = document.getElementById('fixedStats');
+            
+            if (statsContainer) {
+                const rect = statsContainer.getBoundingClientRect();
+                if (rect.bottom < 0) {
+                    fixedStats.classList.add('visible');
+                } else {
+                    fixedStats.classList.remove('visible');
+                }
+            }
+        }
+    
+        // Update fixed header values
+        function updateFixedHeaderValues() {
+            document.getElementById('fixedShipName').textContent = document.getElementById('shipName').value;
+            document.getElementById('fixedAC').textContent = document.getElementById('shipAC').value;
+            document.getElementById('fixedHP').textContent = `${document.getElementById('currentHP').value}/${document.getElementById('maxHP').value}`;
+            document.getElementById('fixedTempHP').textContent = document.getElementById('tempHP').value;
+        }
         // Store gunner data globally
         const gunnerData = {
             gunner1: null,
@@ -1321,6 +1601,28 @@
             
             // Sync current direction
             const currentDirection = document.getElementById('currentDirectionHelm').value;
+        }
+        // Handle fixed header visibility
+        function handleFixedHeader() {
+            const statsContainer = document.querySelector('.stats-container');
+            const fixedStats = document.getElementById('fixedStats');
+            
+            if (statsContainer) {
+                const rect = statsContainer.getBoundingClientRect();
+                if (rect.bottom < 0) {
+                    fixedStats.classList.add('visible');
+                } else {
+                    fixedStats.classList.remove('visible');
+                }
+            }
+        }
+        
+        // Update fixed header values
+        function updateFixedHeaderValues() {
+            document.getElementById('fixedShipName').textContent = document.getElementById('shipName').value;
+            document.getElementById('fixedAC').textContent = document.getElementById('shipAC').value;
+            document.getElementById('fixedHP').textContent = `${document.getElementById('currentHP').value}/${document.getElementById('maxHP').value}`;
+            document.getElementById('fixedTempHP').textContent = document.getElementById('tempHP').value;
         }
         
         // Save all editable content to local storage
@@ -1490,6 +1792,10 @@
         
         // Initialize the sheet
         window.onload = function() {
+            // Initialize theme
+            initializeTheme();
+            
+            // Load saved data
             loadFromLocalStorage();
             addImportButton();
             
@@ -1510,6 +1816,29 @@
                     saveToLocalStorage();
                 });
             });
+            
+            // Add event listeners for updating fixed header
+            document.getElementById('shipName').addEventListener('input', updateFixedHeaderValues);
+            document.getElementById('shipAC').addEventListener('input', updateFixedHeaderValues);
+            document.getElementById('currentHP').addEventListener('input', updateFixedHeaderValues);
+            document.getElementById('maxHP').addEventListener('input', updateFixedHeaderValues);
+            document.getElementById('tempHP').addEventListener('input', updateFixedHeaderValues);
+            
+            // Add dark mode toggle event listener
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Add scroll event listener for fixed header
+            window.addEventListener('scroll', handleFixedHeader);
+            
+            // Initialize fixed header values
+            updateFixedHeaderValues();
+            
+            // Initialize crew count
+            updateCrewCount();
+            
+            // Initialize active modules counter
+            updateActiveModulesCount();
+        };
             
             // Initialize crew count
             updateCrewCount();
@@ -1669,20 +1998,13 @@
             // Extract name
             document.getElementById('helmsmanPlayer').value = characterData.name;
             
-            // Extract Charisma modifier + proficiency for vehicle checks (changed from Wisdom)
+            // Extract Charisma modifier + proficiency for vehicle checks
             const chaMod = getAbilityModifier(characterData.system.abilities.cha.value);
+            const profBonus = getProficiencyBonus(characterData);
             
-            // Force proficiency bonus to be 3
-            const profBonus = 3;
-            
-            // Check for vehicle proficiency
-            let isVehicleProficient = false;
-            if (characterData.system.tools && characterData.system.tools.vehicle && characterData.system.tools.vehicle.value > 0) {
-                isVehicleProficient = true;
-            }
-            
-            // Calculate vehicle check bonus
-            const vehicleCheckBonus = chaMod + (isVehicleProficient ? profBonus : 0);
+            // Calculate vehicle check bonus (always add proficiency)
+            // Changed to always include proficiency since this is a specialized task
+            const vehicleCheckBonus = chaMod + profBonus;
             const vehicleDisplay = (vehicleCheckBonus >= 0) ? `+${vehicleCheckBonus}` : vehicleCheckBonus;
             
             // Update vehicle check display in ability descriptions
@@ -1695,7 +2017,7 @@
             const helmsmanStatsHtml = `
                 <div class="crew-role-stat">Charisma: ${chaMod >= 0 ? '+' : ''}${chaMod}</div>
                 <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
-                <div class="crew-role-stat">Vehicle ${isVehicleProficient ? '(Proficient)' : ''}: ${vehicleDisplay}</div>
+                <div class="crew-role-stat">Vehicle Check: ${vehicleDisplay}</div>
             `;
             addStatsDisplay('helmsman', helmsmanStatsHtml);
         }
