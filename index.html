@@ -1446,29 +1446,7 @@
                 document.body.setAttribute('data-theme', 'dark');
             }
         }
-    
-        // Handle fixed header visibility
-        function handleFixedHeader() {
-            const statsContainer = document.querySelector('.stats-container');
-            const fixedStats = document.getElementById('fixedStats');
-            
-            if (statsContainer) {
-                const rect = statsContainer.getBoundingClientRect();
-                if (rect.bottom < 0) {
-                    fixedStats.classList.add('visible');
-                } else {
-                    fixedStats.classList.remove('visible');
-                }
-            }
-        }
-    
-        // Update fixed header values
-        function updateFixedHeaderValues() {
-            document.getElementById('fixedShipName').textContent = document.getElementById('shipName').value;
-            document.getElementById('fixedAC').textContent = document.getElementById('shipAC').value;
-            document.getElementById('fixedHP').textContent = `${document.getElementById('currentHP').value}/${document.getElementById('maxHP').value}`;
-            document.getElementById('fixedTempHP').textContent = document.getElementById('tempHP').value;
-        }
+
         // Store gunner data globally
         const gunnerData = {
             gunner1: null,
@@ -1499,10 +1477,6 @@
         }
     
         // THEN THE REST OF YOUR EXISTING SCRIPT FUNCTIONS WILL FOLLOW...
-        // Toggle power module activation
-        function togglePowerModule(module) {
-            // existing code...
-        }
         // Toggle power module activation
         function togglePowerModule(module) {
             // Check if we're activating or deactivating
@@ -1593,7 +1567,6 @@
                 alert('Warning: You have exceeded the maximum crew capacity of 15!');
             }
         }
-        
         // Sync velocity and direction between displays
         function syncHelmsmanValues() {
             // Sync current velocity
@@ -1601,6 +1574,9 @@
             
             // Sync current direction
             const currentDirection = document.getElementById('currentDirectionHelm').value;
+            
+            // Update any displays or calculations that depend on these values
+            saveToLocalStorage();
         }
         // Handle fixed header visibility
         function handleFixedHeader() {
@@ -1832,13 +1808,6 @@
             
             // Initialize fixed header values
             updateFixedHeaderValues();
-            
-            // Initialize crew count
-            updateCrewCount();
-            
-            // Initialize active modules counter
-            updateActiveModulesCount();
-        };
             
             // Initialize crew count
             updateCrewCount();
