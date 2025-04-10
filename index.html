@@ -892,7 +892,7 @@
                         <strong>Engineering Order:</strong> Enable the Boatswain to allocate one additional power charge beyond their proficiency bonus.
                     </div>
                     <div class="command-option" onclick="selectCommand(this, 'helmsman')" id="helmsmanCommand">
-                        <strong>Tactical Order:</strong> Grant the Helmsman +2 to their Wisdom (Vehicle) checks for maneuvering and collision avoidance until the start of your next turn.
+                        <strong>Tactical Order:</strong> Grant the Helmsman +2 to their Charisma (Vehicle) checks for maneuvering and collision avoidance until the start of your next turn.
                     </div>
                 </div>
                 
@@ -900,10 +900,9 @@
                     <h3 style="margin-top: 15px; color: #6a1b9a;">Special Actions</h3>
                     
                     <div class="ability-item">
-                        <div class="ability-item">
-                            <div class="ability-name">Grappling Ropes</div>
-                            <div class="ability-desc">When within 5 feet of another vessel, make a Charisma (Vehicles) check (<span id="grappleCheckBonus">+0</span>) to grapple ships together.</div>
-                        </div>
+                        <div class="ability-name">Grappling Ropes</div>
+                        <div class="ability-desc">When within 5 feet of another vessel, make a Charisma (Vehicles) check (<span id="grappleCheckBonus">+0</span>) to grapple ships together.</div>
+                    </div>
                     
                     <div class="ability-item">
                         <div class="ability-name">To Me, Ocean Court</div>
@@ -958,12 +957,12 @@
                 
                 <div class="maneuver">
                     <div class="maneuver-title">Overdrive <span class="maneuver-level">(Special Action)</span></div>
-                    <div class="ability-desc">Triple maximum acceleration, but requires a Wisdom (Vehicle) check (<span id="helmsmanCheckBonus">+0</span>). On failure, acceleration capability is zero on your next turn.</div>
+                    <div class="ability-desc">Triple maximum acceleration, but requires a Charisma (Vehicle) check (<span id="helmsmanCheckBonus">+0</span>). On failure, acceleration capability is zero on your next turn.</div>
                 </div>
                 
                 <div class="maneuver">
                     <div class="maneuver-title">Emergency Brake <span class="maneuver-level">(Special Action)</span></div>
-                    <div class="ability-desc">Triple normal deceleration limit. Requires a Wisdom (Vehicle) check (<span id="helmsmanCheckBonus2">+0</span>). On failure, the ship takes 2d6 force damage.</div>
+                    <div class="ability-desc">Triple normal deceleration limit. Requires a Charisma (Vehicle) check (<span id="helmsmanCheckBonus2">+0</span>). On failure, the ship takes 2d6 force damage.</div>
                 </div>
                 
                 <div class="maneuver">
@@ -1006,7 +1005,7 @@
                         <div>Flower Cannon</div>
                         <div>300/900 ft.</div>
                         <div>
-                            <input type="text" class="number-input" value="+6" id="rightCannonToHit">
+                            <input type="text" class="number-input" value="+6" id="rightCannonToHit" readonly>
                         </div>
                         <div>3d10<span id="rightCannonDamage"></span> radiant</div>
                         <div>Right Broadside</div>
@@ -1027,7 +1026,7 @@
                         <div>Flower Cannon</div>
                         <div>300/900 ft.</div>
                         <div>
-                            <input type="text" class="number-input" value="+6" id="leftCannonToHit">
+                            <input type="text" class="number-input" value="+6" id="leftCannonToHit" readonly>
                         </div>
                         <div>3d10<span id="leftCannonDamage"></span> radiant</div>
                         <div>Left Broadside</div>
@@ -1048,7 +1047,7 @@
                         <div>Carronade</div>
                         <div>500/1500 ft.</div>
                         <div>
-                            <input type="text" class="number-input" value="+6" id="carronadeToHit">
+                            <input type="text" class="number-input" value="+6" id="carronadeToHit" readonly>
                         </div>
                         <div>8d10<span id="carronadeDamage"></span> bludgeoning</div>
                         <div>Front (Bow)</div>
@@ -1084,7 +1083,6 @@
                     </div>
                 </div>
             </div>
-            
             <!-- Boatswain Section -->
             <div class="section boatswain">
                 <span class="role-badge">BOATSWAIN</span>
@@ -1671,12 +1669,11 @@
             // Extract name
             document.getElementById('helmsmanPlayer').value = characterData.name;
             
-            // Extract Wisdom modifier + proficiency for vehicle checks
-            const wisMod = getAbilityModifier(characterData.system.abilities.wis.value);
+            // Extract Charisma modifier + proficiency for vehicle checks (changed from Wisdom)
+            const chaMod = getAbilityModifier(characterData.system.abilities.cha.value);
             
-            // Force proficiency bonus to be 3 instead of calculating it
-            // This fixes the issue you mentioned with incorrect proficiency bonus
-            const profBonus = 3; // Or use getProficiencyBonus(characterData) if you prefer to calculate it
+            // Force proficiency bonus to be 3
+            const profBonus = 3;
             
             // Check for vehicle proficiency
             let isVehicleProficient = false;
@@ -1685,7 +1682,7 @@
             }
             
             // Calculate vehicle check bonus
-            const vehicleCheckBonus = wisMod + (isVehicleProficient ? profBonus : 0);
+            const vehicleCheckBonus = chaMod + (isVehicleProficient ? profBonus : 0);
             const vehicleDisplay = (vehicleCheckBonus >= 0) ? `+${vehicleCheckBonus}` : vehicleCheckBonus;
             
             // Update vehicle check display in ability descriptions
@@ -1696,7 +1693,7 @@
             
             // Display helmsman's stats
             const helmsmanStatsHtml = `
-                <div class="crew-role-stat">Wisdom: ${wisMod >= 0 ? '+' : ''}${wisMod}</div>
+                <div class="crew-role-stat">Charisma: ${chaMod >= 0 ? '+' : ''}${chaMod}</div>
                 <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
                 <div class="crew-role-stat">Vehicle ${isVehicleProficient ? '(Proficient)' : ''}: ${vehicleDisplay}</div>
             `;
@@ -1776,8 +1773,7 @@
         
         // Helper function to get proficiency bonus from character data
         function getProficiencyBonus(characterData) {
-            // In Foundry, proficiency bonus is often calculated based on level
-            // For a level 1 character, prof bonus is 2, then increases by 1 every 4 levels
+            // Get character level
             let level = 1; // Default to level 1
             
             // Try to extract level from character data
@@ -1787,8 +1783,18 @@
                 level = characterData.system.levels;
             }
             
-            // Calculate proficiency bonus
-            return Math.floor((level - 1) / 4) + 2;
+            // Calculate proficiency bonus according to D&D 5e rules
+            if (level <= 4) {
+                return 2;
+            } else if (level <= 8) {
+                return 3;
+            } else if (level <= 12) {
+                return 4;
+            } else if (level <= 16) {
+                return 5;
+            } else {
+                return 6; // Level 17-20
+            }
         }
         
         // Show notification
