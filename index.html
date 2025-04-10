@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oceans Court Express - Ship Character Sheet</title>
+    <style>
+        :root {
+            --primary: #1a3a5a;
+            --secondary: #3d6a8a;
+            --accent: #ffcc00;
+            --light: #e1eef6;
+            --dark: #0a1a2a;
+            --danger: #d9534f;
+            --success: #5cb85c;
+            --warning: #f0ad4e;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f5f9;
+            color: var(--dark);
+            padding: 20px;
+        }
+
+        .sheet-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            width: 80%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ship-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .ship-class {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-style: italic;
+        }
+
+        .shark-train {
+            font-size: 0.9rem;
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .save-container {
+            text-align: right;
+        }
+
+        .save-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .save-btn:hover {
+            background-color: #4cae4c;
+            transform: translateY(-2px);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 15px;
+            border-top: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+
+        .ship-stats {
+            grid-column: span 4;
+        }
+
+        .movement {
+            grid-column: span 4;
+        }
+
+        .crew {
+            grid-column: span 4;
+        }
+
+        .captain {
+            grid-column: span 6;
+            border-top-color: #6a1b9a;
+        }
+
+        .helmsman {
+            grid-column: span 6;
+            border-top-color: #0277bd;
+        }
+
+        .gunner {
+            grid-column: span 6;
+            border-top-color: #d32f2f;
+        }
+
+        .boatswain {
+            grid-column: span 6;
+            border-top-color: #388e3c;
+        }
+
+        .weapons {
+            grid-column: span 12;
+            margin-top: 10px;
+        }
+
+        .role-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 10px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .captain .role-badge {
+            background-color: #6a1b9a;
+        }
+
+        .helmsman .role-badge {
+            background-color: #0277bd;
+        }
+
+        .gunner .role-badge {
+            background-color: #d32f2f;
+        }
+
+        .boatswain .role-badge {
+            background-color: #388e3c;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat-block {
+            background-color: var(--light);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--dark);
+            width: 100%;
+            background: transparent;
+            border: none;
+            text-align: center;
+        }
+
+        .stat-value:focus {
+            outline: 2px solid var(--accent);
+            border-radius: 3px;
+        }
+
+        .ability-list {
+            margin-top: 15px;
+        }
+
+        .ability-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e1e1e1;
+        }
+
+        .ability-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: var(--primary);
+        }
+
+        .ability-desc {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .weapon-property {
+            display: inline-block;
+            background-color: var(--light);
+            color: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .power-module {
+            background-color: var(--light);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .power-name {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .power-cost {
+            float: right;
+            background-color: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .power-desc {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .resource-tracker {
+            margin-top: 15px;
+        }
+
+        .resource-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        .resource-boxes {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .resource-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--secondary);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .resource-box.filled {
+            background-color: var(--secondary);
+        }
+
+        .crew-roles {
+            margin-top: 15px;
+        }
+
+        .crew-role {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .crew-role-name {
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        .crew-role-player {
+            flex-grow: 1;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .maneuver {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(2, 119, 189, 0.1);
+            border-radius: 5px;
+            border-left: 4px solid #0277bd;
+        }
+
+        .maneuver-title {
+            font-weight: bold;
+            color: #0277bd;
+        }
+
+        .maneuver-level {
+            font-size: 0.8rem;
+            color: #555;
+            margin-left: 5px;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: help;
+        }
+
+        .tooltip i {
+            color: var(--secondary);
+            font-size: 0.8rem;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--dark) transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .shark-feature {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(255, 204, 0, 0.1);
+            border-radius: 5px;
+            border-left: 4px solid var(--accent);
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+            
+            .sheet-container {
+                box-shadow: none;
+            }
+            
+            .save-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sheet-container">
+        <img src="/api/placeholder/800/600" alt="Hammerhead Ship Silhouette" class="watermark">
+        
+        <div class="sheet-header">
+            <div>
+                <input type="text" class="ship-name" value="Oceans Court Express" id="shipName">
+                <div class="ship-class">Frigate Class (2×2)</div>
+                <div class="shark-train">Hammerhead Shark Train</div>
+            </div>
+            <div class="save-container">
+                <button class="save-btn" onclick="saveSheet()">SAVE SHEET</button>
+            </div>
+        </div>
+        
+        <div class="grid-container">
+            <!-- Basic Ship Stats -->
+            <div class="section ship-stats">
+                <h2 class="section-title">
+                    <i>⚓</i> Ship Attributes
+                </h2>
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <label class="stat-label">Armor Class (AC)</label>
+                        <input type="number" class="stat-value" value="16" id="shipAC">
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Hull Points (HP)</label>
+                        <input type="number" class="stat-value" value="100" id="shipHP">
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Current Hull Points</label>
+                        <input type="number" class="stat-value" value="100" id="currentHP">
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Air Supply (Days)</label>
+                        <input type="number" class="stat-value" value="30" id="airSupply">
+                    </div>
+                </div>
+                
+                <div class="shark-feature">
+                    <div class="ability-name">Shark Sense</div>
+                    <div class="ability-desc">The hammerhead design grants enhanced spatial awareness. The ship gains advantage on checks to detect objects or other vessels in The Phlogiston within 1000 feet.</div>
+                </div>
+            </div>
+            
+            <!-- Movement Section -->
+            <div class="section movement">
+                <h2 class="section-title">
+                    <i>🧭</i> Movement Attributes
+                </h2>
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <label class="stat-label">Base Velocity</label>
+                        <input type="number" class="stat-value" value="500" id="baseVelocity"> ft/round
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Max Acceleration</label>
+                        <input type="number" class="stat-value" value="200" id="maxAccel"> ft/round
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Max Deceleration</label>
+                        <input type="number" class="stat-value" value="200" id="maxDecel"> ft/round
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Current Direction</label>
+                        <select class="stat-value" id="currentDirection">
+                            <option value="N">North</option>
+                            <option value="NE">Northeast</option>
+                            <option value="E" selected>East</option>
+                            <option value="SE">Southeast</option>
+                            <option value="S">South</option>
+                            <option value="SW">Southwest</option>
+                            <option value="W">West</option>
+                            <option value="NW">Northwest</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="shark-feature">
+                    <div class="ability-name">Streamlined Hull</div>
+                    <div class="ability-desc">The shark-like design reduces fluid resistance. When moving in a straight line for at least two consecutive turns, the ship can accelerate an additional 50 ft/round.</div>
+                </div>
+            </div>
+            
+            <!-- Crew Section -->
+            <div class="section crew">
+                <h2 class="section-title">
+                    <i>👥</i> Crew Details
+                </h2>
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <label class="stat-label">Minimum Crew</label>
+                        <input type="number" class="stat-value" value="5" id="minCrew">
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Maximum Crew</label>
+                        <input type="number" class="stat-value" value="15" id="maxCrew">
+                    </div>
+                </div>
+                
+                <div class="crew-roles">
+                    <div class="crew-role">
+                        <div class="crew-role-name">Captain:</div>
+                        <input type="text" class="crew-role-player" id="captainPlayer" placeholder="Player name...">
+                    </div>
+                    <div class="crew-role">
+                        <div class="crew-role-name">Helmsman:</div>
+                        <input type="text" class="crew-role-player" id="helmsmanPlayer" placeholder="Player name...">
+                    </div>
+                    <div class="crew-role">
+                        <div class="crew-role-name">Gunner:</div>
+                        <input type="text" class="crew-role-player" id="gunnerPlayer" placeholder="Player name...">
+                    </div>
+                    <div class="crew-role">
+                        <div class="crew-role-name">Boatswain:</div>
+                        <input type="text" class="crew-role-player" id="boatswainPlayer" placeholder="Player name...">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Captain Section -->
+            <div class="section captain">
+                <span class="role-badge">CAPTAIN</span>
+                <h2 class="section-title">
+                    <i>🎖️</i> Captain's Station
+                </h2>
+                
+                <div class="ability-list">
+                    <div class="ability-item">
+                        <div class="ability-name">Ship Initiative</div>
+                        <div class="ability-desc">As Captain, you roll initiative for the ship in combat.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Hailing</div>
+                        <div class="ability-desc">You can hail other vessels, functioning as a Sending spell to communicate with another ship's Captain.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Captain's Commands</div>
+                        <div class="ability-desc">At the beginning of combat, issue one of these commands:</div>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>Allow Gunner to make an additional weapon attack</li>
+                            <li>Enable Boatswain to allocate one additional power</li>
+                            <li>Permit Helmsman to accelerate/decelerate one extra time</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="ability-list">
+                    <h3 style="margin-top: 15px; color: #6a1b9a;">Special Actions</h3>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Grappling Ropes</div>
+                        <div class="ability-desc">When within 5 feet of another vessel, make a Charisma (Vehicles) check to grapple ships together.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">To Me, Ocean Court</div>
+                        <div class="ability-desc">Call a boarding/defense party. Crew members who haven't taken their turn teleport to your position.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Shark's Intimidation</div>
+                        <div class="ability-desc">Once per encounter, use the hammerhead silhouette to make an Intimidation check against an enemy vessel with advantage.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Helmsman Section -->
+            <div class="section helmsman">
+                <span class="role-badge">HELMSMAN</span>
+                <h2 class="section-title">
+                    <i>🧭</i> Helm Control
+                </h2>
+                
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <label class="stat-label">Current Velocity</label>
+                        <input type="number" class="stat-value" value="500" id="currentVelocity"> ft/round
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Emergency Acceleration (3×)</label>
+                        <input type="number" class="stat-value" value="600" id="emergencyAccel"> ft/round
+                    </div>
+                </div>
+                
+                <div class="maneuver">
+                    <div class="maneuver-title">Overdrive <span class="maneuver-level">(Special Action)</span></div>
+                    <div class="ability-desc">Triple maximum acceleration, but requires a Wisdom (Vehicle) check. On failure, acceleration capability is zero on your next turn.</div>
+                </div>
+                
+                <div class="maneuver">
+                    <div class="maneuver-title">Emergency Brake <span class="maneuver-level">(Special Action)</span></div>
+                    <div class="ability-desc">Triple normal deceleration limit. Requires a Wisdom (Vehicle) check. On failure, the ship takes 2d6 force damage.</div>
+                </div>
+                
+                <div class="maneuver">
+                    <div class="maneuver-title">Maneuver - Evade <span class="maneuver-level">(1st-level)</span></div>
+                    <div class="ability-desc">As a reaction, expend a 1st-level spell slot to add proficiency bonus to ship's AC or Wisdom (Vehicle) checks until your next turn.</div>
+                </div>
+                
+                <div class="maneuver">
+                    <div class="maneuver-title">Maneuver - Jamming <span class="maneuver-level">(3rd-level)</span></div>
+                    <div class="ability-desc">Expend a 3rd-level spell slot to match speed and acceleration of a target vessel within 5 feet for 1 minute.</div>
+                </div>
+                
+                <div class="shark-feature">
+                    <div class="ability-name">Hammerhead Drift</div>
+                    <div class="ability-desc">The unique design of the ship allows for sudden lateral moves. Once per combat, you can move the ship 100 feet in any direction without changing velocity.</div>
+                </div>
+            </div>
+            
+            <!-- Gunner Section -->
+            <div class="section gunner">
+                <span class="role-badge">GUNNER</span>
+                <h2 class="section-title">
+                    <i>🎯</i> Weapons Control
+                </h2>
+                
+                <div class="ability-item">
+                    <div class="ability-name">Weapon Proficiency</div>
+                    <div class="ability-desc">Add your DEX modifier + proficiency bonus to attack and damage rolls.</div>
+                </div>
+                
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <label class="stat-label">Attack Bonus</label>
+                        <input type="number" class="stat-value" value="+6" id="attackBonus">
+                    </div>
+                    <div class="stat-block">
+                        <label class="stat-label">Module HP</label>
+                        <input type="number" class="stat-value" value="10" id="moduleHP">
+                    </div>
+                </div>
+                
+                <div class="ability-list">
+                    <h3 style="margin-top: 15px; color: #d32f2f;">Special Actions</h3>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Switch Weapons</div>
+                        <div class="ability-desc">As a bonus action, switch between different weapon systems.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Trigger on the Pulse</div>
+                        <div class="ability-desc">Ready a ship weapon attack to fire at a specific trigger.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Shark's Bite</div>
+                        <div class="ability-desc">When firing the Carronade, you can choose to deal an additional 1d10 damage with a successful hit. The weapon then requires two actions to charge before firing again.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Boatswain Section -->
+            <div class="section boatswain">
+                <span class="role-badge">BOATSWAIN</span>
+                <h2 class="section-title">
+                    <i>⚡</i> Power Systems
+                </h2>
+                
+                <div class="resource-tracker">
+                    <label class="resource-label">Power Charges (Proficiency Bonus):</label>
+                    <div class="resource-boxes" id="powerCharges">
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                    </div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">Weapons Array<span class="power-cost">1 Charge</span></div>
+                    <div class="power-desc">+1d6 damage to all weapon attacks until the start of your next turn</div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">Deflector Grid<span class="power-cost">1 Charge</span></div>
+                    <div class="power-desc">Ship gains resistance to one damage type until the start of your next turn</div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">Thruster Override<span class="power-cost">1 Charge</span></div>
+                    <div class="power-desc">+100 feet to the ship's maximum acceleration or deceleration this turn</div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">Hull Reinforcement<span class="power-cost">1 Charge</span></div>
+                    <div class="power-desc">Ship gains 2d8 temporary hit points</div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">System Restoration<span class="power-cost">1 Charge</span></div>
+                    <div class="power-desc">If a weapon system or module has dropped to zero hit points, restore it to functioning at 1 hit point</div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">Warp Core Charge<span class="power-cost">2 Charges</span></div>
+                    <div class="power-desc">After 3 consecutive turns of charging, can initiate warp jump to escape combat</div>
+                </div>
+                
+                <div class="power-module">
+                    <div class="power-name">Shark Acceleration<span class="power-cost">1 Charge</span></div>
+                    <div class="power-desc">Enhanced hammerhead propulsion systems provide an additional 50 ft/round of acceleration for one turn.</div>
+                </div>
+                
+                <div class="ability-list">
+                    <h3 style="margin-top: 15px; color: #388e3c;">Special Actions</h3>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Arcane Overclock</div>
+                        <div class="ability-desc">As an action, expend a spell slot to gain additional power charges equal to the spell slot level for this turn only.</div>
+                    </div>
+                    
+                    <div class="ability-item">
+                        <div class="ability-name">Emergency Hotfix</div>
+                        <div class="ability-desc">When the ship drops below half its hull points, use your reaction to immediately reallocate 1 power charge.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Weapons Section -->
+            <div class="section weapons">
+                <h2 class="section-title">
+                    <i>🔫</i> Ship Weapons
+                </h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Weapon</th>
+                            <th>Range</th>
+                            <th>Damage</th>
+                            <th>Position</th>
+                            <th>Special Properties</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Medium Ballista</td>
+                            <td>300/900 ft.</td>
+                            <td>3d10 radiant</td>
+                            <td>Right Broadside</td>
+                            <td>
+                                <div class="weapon-property">90° Firing Arc</div>
+                            </td>
+                            <td>
+                                <select id="rightBallistaStatus">
+                                    <option value="operational">Operational</option>
+                                    <option value="damaged">Damaged</option>
+                                    <option value="destroyed">Destroyed</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Medium Ballista</td>
+                            <td>300/900 ft.</td>
+                            <td>3d10 radiant</td>
+                            <td>Left Broadside</td>
+                            <td>
+                                <div class="weapon-property">90° Firing Arc</div>
+                            </td>
+                            <td>
+                                <select id="leftBallistaStatus">
+                                    <option value="operational">Operational</option>
+                                    <option value="damaged">Damaged</option>
+                                    <option value="destroyed">Destroyed</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Carronade</td>
+                            <td>500/1500 ft.</td>
+                            <td>8d10 bludgeoning</td>
+                            <td>Front (Bow)</td>
+                            <td>
+                                <div class="weapon-property">Utilize</div>
+                                <div class="weapon-property">45° Firing Arc</div>
+                                <div class="tooltip"><i>ℹ️</i>
+                                    <span class="tooltip-text">Utilize: Once fired, requires another action to charge before firing again.</span>
+                                </div>
+                            </td>
+                            <td>
+                                <select id="carronadeStatus">
+                                    <option value="operational">Operational</option>
+                                    <option value="damaged">Damaged</option>
+                                    <option value="destroyed">Destroyed</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="resource-tracker" style="margin-top: 20px;">
+                    <label class="resource-label">Carronade Charge Status:</label>
+                    <div class="resource-boxes" id="carronadeCharge">
+                        <div class="resource-box filled" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: #666; margin-left: 10px;">Filled = Ready to fire</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle resource boxes (for power charges and other trackable resources)
+        function toggleResourceBox(box) {
+            box.classList.toggle('filled');
+            saveToLocalStorage();
+        }
+        
+        // Save all editable content to local storage
+        function saveSheet() {
+            // Get all input fields and their values
+            const inputs = document.querySelectorAll('input, select');
+            const data = {};
+            
+            inputs.forEach(input => {
+                if (input.id) {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            // Save power charges state
+            const powerCharges = document.querySelectorAll('#powerCharges .resource-box');
+            data['powerChargesState'] = Array.from(powerCharges).map(box => box.classList.contains('filled')).join(',');
+            
+            // Save carronade charge state
+            const carronadeCharge = document.querySelectorAll('#carronadeCharge .resource-box');
+            data['carronadeChargeState'] = Array.from(carronadeCharge).map(box => box.classList.contains('filled')).join(',');
+            
+            // Save to local storage
+            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+            
+            // Provide user feedback
+            alert('Ship data saved!');
+            
+            // Create a download option
+            const dataStr = JSON.stringify(data);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'OceansCourtExpress_' + new Date().toISOString().slice(0, 10) + '.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        
+        // Load data from local storage on page load
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('oceansCourtExpressData');
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Restore input values
+                Object.keys(data).forEach(key => {
+                    if (key !== 'powerChargesState' && key !== 'carronadeChargeState') {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                // Restore power charges state
+                if (data.powerChargesState) {
+                    const powerCharges = document.querySelectorAll('#powerCharges .resource-box');
+                    const states = data.powerChargesState.split(',').map(state => state === 'true');
+                    
+                    states.forEach((state, index) => {
+                        if (index < powerCharges.length) {
+                            if (state) {
+                                powerCharges[index].classList.add('filled');
+                            } else {
+                                powerCharges[index].classList.remove('filled');
+                            }
+                        }
+                    });
+                }
+                
+                // Restore carronade charge state
+                if (data.carronadeChargeState) {
+                    const carronadeCharge = document.querySelectorAll('#carronadeCharge .resource-box');
+                    const states = data.carronadeChargeState.split(',').map(state => state === 'true');
+                    
+                    states.forEach((state, index) => {
+                        if (index < carronadeCharge.length) {
+                            if (state) {
+                                carronadeCharge[index].classList.add('filled');
+                            } else {
+                                carronadeCharge[index].classList.remove('filled');
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Add file import functionality
+        function addImportButton() {
+            const saveContainer = document.querySelector('.save-container');
+            
+            const importBtn = document.createElement('button');
+            importBtn.className = 'save-btn';
+            importBtn.style.backgroundColor = '#0277bd';
+            importBtn.style.marginRight = '10px';
+            importBtn.textContent = 'IMPORT SHEET';
+            importBtn.onclick = function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = function(event) {
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+                            loadFromLocalStorage();
+                            alert('Ship data imported successfully!');
+                        } catch (error) {
+                            alert('Error importing file: ' + error.message);
+                        }
+                    };
+                    
+                    reader.readAsText(file);
+                };
+                
+                input.click();
+            };
+            
+            saveContainer.prepend(importBtn);
+        }
+        
+        // Initialize the sheet
+        window.onload = function() {
+            loadFromLocalStorage();
+            addImportButton();
+            
+            // Set event listeners for all editable elements to save on change
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('change', saveToLocalStorage);
+            });
+        };
+        
+        // Save to local storage on any change
+        function saveToLocalStorage() {
+            // Get all input fields and their values
+            const inputs = document.querySelectorAll('input, select');
+            const data = {};
+            
+            inputs.forEach(input => {
+                if (input.id) {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            // Save power charges state
+            const powerCharges = document.querySelectorAll('#powerCharges .resource-box');
+            data['powerChargesState'] = Array.from(powerCharges).map(box => box.classList.contains('filled')).join(',');
+            
+            // Save carronade charge state
+            const carronadeCharge = document.querySelectorAll('#carronadeCharge .resource-box');
+            data['carronadeChargeState'] = Array.from(carronadeCharge).map(box => box.classList.contains('filled')).join(',');
+            
+            // Save to local storage
+            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+        }
+    </script>
+</body>
+</html>
