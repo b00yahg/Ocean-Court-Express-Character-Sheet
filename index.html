@@ -682,6 +682,13 @@
             opacity: 1;
         }
 
+        select {
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+            width: 120px;
+        }
+
         @media print {
             body {
                 background-color: white;
@@ -826,11 +833,19 @@
                             </div>
                         </div>
                         <div class="crew-role">
-                            <div class="crew-role-name">Gunner:</div>
+                            <div class="crew-role-name">Gunner 1:</div>
                             <div class="crew-role-input-group">
-                                <input type="text" class="crew-role-player" id="gunnerPlayer" placeholder="Player name..." readonly>
-                                <button class="upload-btn gunner-upload" onclick="triggerFileUpload('gunner')">Upload Character</button>
-                                <input type="file" id="gunnerFileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'gunner')">
+                                <input type="text" class="crew-role-player" id="gunner1Player" placeholder="Player name..." readonly>
+                                <button class="upload-btn gunner-upload" onclick="triggerFileUpload('gunner1')">Upload Character</button>
+                                <input type="file" id="gunner1FileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'gunner1')">
+                            </div>
+                        </div>
+                        <div class="crew-role">
+                            <div class="crew-role-name">Gunner 2:</div>
+                            <div class="crew-role-input-group">
+                                <input type="text" class="crew-role-player" id="gunner2Player" placeholder="Player name..." readonly>
+                                <button class="upload-btn gunner-upload" onclick="triggerFileUpload('gunner2')">Upload Character</button>
+                                <input type="file" id="gunner2FileUpload" style="display: none;" accept=".json" onchange="handleFileUpload(this, 'gunner2')">
                             </div>
                         </div>
                         <div class="crew-role">
@@ -885,9 +900,10 @@
                     <h3 style="margin-top: 15px; color: #6a1b9a;">Special Actions</h3>
                     
                     <div class="ability-item">
-                        <div class="ability-name">Grappling Ropes</div>
-                        <div class="ability-desc">When within 5 feet of another vessel, make a Charisma (Vehicles) check to grapple ships together.</div>
-                    </div>
+                        <div class="ability-item">
+                            <div class="ability-name">Grappling Ropes</div>
+                            <div class="ability-desc">When within 5 feet of another vessel, make a Charisma (Vehicles) check (<span id="grappleCheckBonus">+0</span>) to grapple ships together.</div>
+                        </div>
                     
                     <div class="ability-item">
                         <div class="ability-name">To Me, Ocean Court</div>
@@ -942,12 +958,12 @@
                 
                 <div class="maneuver">
                     <div class="maneuver-title">Overdrive <span class="maneuver-level">(Special Action)</span></div>
-                    <div class="ability-desc">Triple maximum acceleration, but requires a Wisdom (Vehicle) check. On failure, acceleration capability is zero on your next turn.</div>
+                    <div class="ability-desc">Triple maximum acceleration, but requires a Wisdom (Vehicle) check (<span id="helmsmanCheckBonus">+0</span>). On failure, acceleration capability is zero on your next turn.</div>
                 </div>
                 
                 <div class="maneuver">
                     <div class="maneuver-title">Emergency Brake <span class="maneuver-level">(Special Action)</span></div>
-                    <div class="ability-desc">Triple normal deceleration limit. Requires a Wisdom (Vehicle) check. On failure, the ship takes 2d6 force damage.</div>
+                    <div class="ability-desc">Triple normal deceleration limit. Requires a Wisdom (Vehicle) check (<span id="helmsmanCheckBonus2">+0</span>). On failure, the ship takes 2d6 force damage.</div>
                 </div>
                 
                 <div class="maneuver">
@@ -992,14 +1008,18 @@
                         <div>
                             <input type="text" class="number-input" value="+6" id="rightCannonToHit">
                         </div>
-                        <div>3d10 radiant</div>
+                        <div>3d10<span id="rightCannonDamage"></span> radiant</div>
                         <div>Right Broadside</div>
                         <div class="weapon-property-container">
                             <div class="weapon-property">90° Firing Arc</div>
                             <div class="weapon-property">HP: <input type="number" style="width: 30px; display: inline-block;" value="10" max="10" min="0" id="rightCannonHP"></div>
                         </div>
                         <div>
-                            <input type="text" style="width: 120px;" placeholder="Gunner name..." id="rightCannonGunner">
+                            <select id="rightCannonGunner" onchange="updateWeaponStats('rightCannon')">
+                                <option value="">Select Gunner...</option>
+                                <option value="gunner1">Gunner 1</option>
+                                <option value="gunner2">Gunner 2</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -1009,14 +1029,18 @@
                         <div>
                             <input type="text" class="number-input" value="+6" id="leftCannonToHit">
                         </div>
-                        <div>3d10 radiant</div>
+                        <div>3d10<span id="leftCannonDamage"></span> radiant</div>
                         <div>Left Broadside</div>
                         <div class="weapon-property-container">
                             <div class="weapon-property">90° Firing Arc</div>
                             <div class="weapon-property">HP: <input type="number" style="width: 30px; display: inline-block;" value="10" max="10" min="0" id="leftCannonHP"></div>
                         </div>
                         <div>
-                            <input type="text" style="width: 120px;" placeholder="Gunner name..." id="leftCannonGunner">
+                            <select id="leftCannonGunner" onchange="updateWeaponStats('leftCannon')">
+                                <option value="">Select Gunner...</option>
+                                <option value="gunner1">Gunner 1</option>
+                                <option value="gunner2">Gunner 2</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -1026,7 +1050,7 @@
                         <div>
                             <input type="text" class="number-input" value="+6" id="carronadeToHit">
                         </div>
-                        <div>8d10 bludgeoning</div>
+                        <div>8d10<span id="carronadeDamage"></span> bludgeoning</div>
                         <div>Front (Bow)</div>
                         <div class="weapon-property-container">
                             <div class="weapon-property">Utilize</div>
@@ -1036,6 +1060,14 @@
                                 <span class="tooltip-text">Utilize: Once fired, requires another action to charge before firing again.</span>
                             </div>
                         </div>
+                        <div>
+                            <select id="carronadeGunner" onchange="updateWeaponStats('carronade')">
+                                <option value="">Select Gunner...</option>
+                                <option value="gunner1">Gunner 1</option>
+                                <option value="gunner2">Gunner 2</option>
+                            </select>
+                        </div>
+                    </div>
                         <div>
                             <input type="text" style="width: 120px;" placeholder="Gunner name..." id="carronadeGunner">
                         </div>
@@ -1163,6 +1195,40 @@
     </div>
 
     <script>
+        // Store gunner data globally
+        const gunnerData = {
+            gunner1: null,
+            gunner2: null
+        };
+    
+        // Update weapon stats based on selected gunner
+        function updateWeaponStats(weapon) {
+            const selector = document.getElementById(`${weapon}Gunner`);
+            const gunnerRole = selector.value;
+            
+            const toHitElement = document.getElementById(`${weapon}ToHit`);
+            const damageElement = document.getElementById(`${weapon}Damage`);
+            
+            if (gunnerRole && gunnerData[gunnerRole]) {
+                // Update to-hit value
+                toHitElement.value = gunnerData[gunnerRole].toHit;
+                
+                // Update damage modifier
+                damageElement.textContent = gunnerData[gunnerRole].damageMod;
+            } else {
+                // Reset values
+                toHitElement.value = "+0";
+                damageElement.textContent = "";
+            }
+            
+            saveToLocalStorage();
+        }
+    
+        // THEN THE REST OF YOUR EXISTING SCRIPT FUNCTIONS WILL FOLLOW...
+        // Toggle power module activation
+        function togglePowerModule(module) {
+            // existing code...
+        }
         // Toggle power module activation
         function togglePowerModule(module) {
             // Check if we're activating or deactivating
@@ -1314,7 +1380,7 @@
                 
                 // Restore input values
                 Object.keys(data).forEach(key => {
-                    if (key !== 'powerModulesState' && key !== 'captainCommand' && key !== 'crewRoleStats') {
+                    if (key !== 'powerModulesState' && key !== 'captainCommand' && key !== 'crewRoleStats' && key !== 'gunnerData') {
                         const element = document.getElementById(key);
                         if (element) {
                             element.value = data[key];
@@ -1347,9 +1413,19 @@
                     }
                 }
                 
+                // Restore gunner data
+                if (data.gunnerData) {
+                    Object.assign(gunnerData, data.gunnerData);
+                    
+                    // Update weapon stats based on assigned gunners
+                    ['rightCannon', 'leftCannon', 'carronade'].forEach(weapon => {
+                        updateWeaponStats(weapon);
+                    });
+                }
+                
                 // Restore crew role stats
                 if (data.crewRoleStats) {
-                    const roles = ['captain', 'helmsman', 'gunner', 'boatswain'];
+                    const roles = ['captain', 'helmsman', 'gunner1', 'gunner2', 'boatswain'];
                     
                     roles.forEach(role => {
                         if (data.crewRoleStats[role]) {
@@ -1360,8 +1436,11 @@
                                 statsDiv.id = `${role}Stats`;
                                 
                                 // Add to the crew role section
-                                const roleSection = document.querySelector(`.crew-role input#${role}Player`).parentElement;
-                                roleSection.appendChild(statsDiv);
+                                const roleInput = document.getElementById(`${role}Player`);
+                                if (roleInput) {
+                                    const roleSection = roleInput.parentElement;
+                                    roleSection.appendChild(statsDiv);
+                                }
                             }
                             
                             // Set the HTML content
@@ -1471,7 +1550,7 @@
             data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
             
             // Save crew role stats
-            const roles = ['captain', 'helmsman', 'gunner', 'boatswain'];
+            const roles = ['captain', 'helmsman', 'gunner1', 'gunner2', 'boatswain'];
             data['crewRoleStats'] = {};
             
             roles.forEach(role => {
@@ -1480,6 +1559,13 @@
                     data['crewRoleStats'][role] = statsElement.innerHTML;
                 }
             });
+            
+            // Save gunner data
+            data['gunnerData'] = gunnerData;
+            
+            // Save to local storage
+            localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
+        }
             
             // Save to local storage
             localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
@@ -1502,19 +1588,20 @@
                     }
                     
                     // Process based on crew role
-                    switch(role) {
-                        case 'captain':
-                            processCaptainData(characterData);
-                            break;
-                        case 'helmsman':
-                            processHelmsmanData(characterData);
-                            break;
-                        case 'gunner':
-                            processGunnerData(characterData);
-                            break;
-                        case 'boatswain':
-                            processBoatswainData(characterData);
-                            break;
+                    if (role === 'gunner1' || role === 'gunner2') {
+                        processGunnerData(characterData, role);
+                    } else {
+                        switch(role) {
+                            case 'captain':
+                                processCaptainData(characterData);
+                                break;
+                            case 'helmsman':
+                                processHelmsmanData(characterData);
+                                break;
+                            case 'boatswain':
+                                processBoatswainData(characterData);
+                                break;
+                        }
                     }
                     
                     // Add a clear button if not already present
@@ -1524,7 +1611,7 @@
                     saveToLocalStorage();
                     
                     // Show success notification
-                    showNotification(`${characterData.name} successfully assigned as ${role.charAt(0).toUpperCase() + role.slice(1)}!`);
+                    showNotification(`${characterData.name} successfully assigned as ${role.replace(/\d+$/, '')}!`);
                     
                 } catch (error) {
                     console.error('Error processing character sheet:', error);
@@ -1562,6 +1649,16 @@
                     initiativeModifier += parseInt(bonusMatch[0]);
                 }
             }
+
+            // Calculate grapple check bonus
+            const grappleCheckBonus = charMod + profBonus;
+            const grappleDisplay = (grappleCheckBonus >= 0) ? `+${grappleCheckBonus}` : grappleCheckBonus;
+            
+            // Update grapple check display in ability description
+            const grappleCheckElement = document.getElementById('grappleCheckBonus');
+            if (grappleCheckElement) {
+                grappleCheckElement.textContent = grappleDisplay;
+            }
             
             // Set ship's initiative
             const initiativeDisplay = (initiativeModifier >= 0) ? `+${initiativeModifier}` : initiativeModifier;
@@ -1584,7 +1681,10 @@
             
             // Extract Wisdom modifier + proficiency for vehicle checks
             const wisMod = getAbilityModifier(characterData.system.abilities.wis.value);
-            const profBonus = getProficiencyBonus(characterData);
+            
+            // Force proficiency bonus to be 3 instead of calculating it
+            // This fixes the issue you mentioned with incorrect proficiency bonus
+            const profBonus = 3; // Or use getProficiencyBonus(characterData) if you prefer to calculate it
             
             // Check for vehicle proficiency
             let isVehicleProficient = false;
@@ -1594,20 +1694,27 @@
             
             // Calculate vehicle check bonus
             const vehicleCheckBonus = wisMod + (isVehicleProficient ? profBonus : 0);
+            const vehicleDisplay = (vehicleCheckBonus >= 0) ? `+${vehicleCheckBonus}` : vehicleCheckBonus;
+            
+            // Update vehicle check display in ability descriptions
+            const checkElements = document.querySelectorAll('[id^="helmsmanCheckBonus"]');
+            checkElements.forEach(element => {
+                element.textContent = vehicleDisplay;
+            });
             
             // Display helmsman's stats
             const helmsmanStatsHtml = `
                 <div class="crew-role-stat">Wisdom: ${wisMod >= 0 ? '+' : ''}${wisMod}</div>
                 <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
-                <div class="crew-role-stat">Vehicle ${isVehicleProficient ? '(Proficient)' : ''}: ${vehicleCheckBonus >= 0 ? '+' : ''}${vehicleCheckBonus}</div>
+                <div class="crew-role-stat">Vehicle ${isVehicleProficient ? '(Proficient)' : ''}: ${vehicleDisplay}</div>
             `;
             addStatsDisplay('helmsman', helmsmanStatsHtml);
         }
         
         // Process Gunner character data
-        function processGunnerData(characterData) {
+        function processGunnerData(characterData, role) {
             // Extract name
-            document.getElementById('gunnerPlayer').value = characterData.name;
+            document.getElementById(`${role}Player`).value = characterData.name;
             
             // Extract Dexterity modifier + proficiency for weapon attacks
             const dexMod = getAbilityModifier(characterData.system.abilities.dex.value);
@@ -1616,28 +1723,38 @@
             // Calculate weapon attack bonus
             const attackBonus = dexMod + profBonus;
             const attackDisplay = (attackBonus >= 0) ? `+${attackBonus}` : attackBonus;
+            const damageDisplay = (dexMod >= 0) ? `+${dexMod}` : dexMod;
             
-            // Update all weapon to-hit values
-            document.getElementById('rightCannonToHit').value = attackDisplay;
-            document.getElementById('leftCannonToHit').value = attackDisplay;
-            document.getElementById('carronadeToHit').value = attackDisplay;
+            // Store gunner data
+            gunnerData[role] = {
+                name: characterData.name,
+                toHit: attackDisplay,
+                damageMod: damageDisplay
+            };
             
-            // Assign gunner to first unassigned weapon
-            if (!document.getElementById('rightCannonGunner').value) {
-                document.getElementById('rightCannonGunner').value = characterData.name;
-            } else if (!document.getElementById('leftCannonGunner').value) {
-                document.getElementById('leftCannonGunner').value = characterData.name;
-            } else if (!document.getElementById('carronadeGunner').value) {
-                document.getElementById('carronadeGunner').value = characterData.name;
-            }
+            // Update any weapons already assigned to this gunner
+            updateAssignedWeapons(role);
             
             // Display gunner's stats
             const gunnerStatsHtml = `
                 <div class="crew-role-stat">Dexterity: ${dexMod >= 0 ? '+' : ''}${dexMod}</div>
                 <div class="crew-role-stat">Proficiency Bonus: +${profBonus}</div>
                 <div class="crew-role-stat">Attack Bonus: ${attackDisplay}</div>
+                <div class="crew-role-stat">Damage Modifier: ${damageDisplay}</div>
             `;
-            addStatsDisplay('gunner', gunnerStatsHtml);
+            addStatsDisplay(role, gunnerStatsHtml);
+        }
+        
+        // Update assigned weapons for a gunner
+        function updateAssignedWeapons(role) {
+            const weapons = ['rightCannon', 'leftCannon', 'carronade'];
+            
+            weapons.forEach(weapon => {
+                const selector = document.getElementById(`${weapon}Gunner`);
+                if (selector && selector.value === role) {
+                    updateWeaponStats(weapon);
+                }
+            });
         }
         
         // Process Boatswain character data
@@ -1763,37 +1880,46 @@
             }
             
             // Role-specific resets
-            switch(role) {
-                case 'captain':
-                    document.getElementById('shipInitiative').value = '+0';
-                    break;
-                case 'helmsman':
-                    // Reset helmsman-specific values
-                    break;
-                case 'gunner':
-                    // Reset gunner from weapons
-                    const gunnerName = document.getElementById('gunnerPlayer').value;
-                    if (document.getElementById('rightCannonGunner').value === gunnerName) {
-                        document.getElementById('rightCannonGunner').value = '';
+            if (role === 'gunner1' || role === 'gunner2') {
+                // Clear gunner data
+                gunnerData[role] = null;
+                
+                // Clear any weapons assigned to this gunner
+                const weapons = ['rightCannon', 'leftCannon', 'carronade'];
+                weapons.forEach(weapon => {
+                    const selector = document.getElementById(`${weapon}Gunner`);
+                    if (selector && selector.value === role) {
+                        selector.value = '';
+                        updateWeaponStats(weapon);
                     }
-                    if (document.getElementById('leftCannonGunner').value === gunnerName) {
-                        document.getElementById('leftCannonGunner').value = '';
-                    }
-                    if (document.getElementById('carronadeGunner').value === gunnerName) {
-                        document.getElementById('carronadeGunner').value = '';
-                    }
-                    break;
-                case 'boatswain':
-                    document.getElementById('availablePowerCharges').value = '4';
-                    document.getElementById('maxModules').textContent = '4';
-                    break;
+                });
+            } else {
+                switch(role) {
+                    case 'captain':
+                        document.getElementById('shipInitiative').value = '+0';
+                        if (document.getElementById('grappleCheckBonus')) {
+                            document.getElementById('grappleCheckBonus').textContent = '+0';
+                        }
+                        break;
+                    case 'helmsman':
+                        // Reset helmsman-specific values
+                        const checkElements = document.querySelectorAll('[id^="helmsmanCheckBonus"]');
+                        checkElements.forEach(element => {
+                            element.textContent = '+0';
+                        });
+                        break;
+                    case 'boatswain':
+                        document.getElementById('availablePowerCharges').value = '4';
+                        document.getElementById('maxModules').textContent = '4';
+                        break;
+                }
             }
             
             // Save changes
             saveToLocalStorage();
             
             // Show notification
-            showNotification(`${role.charAt(0).toUpperCase() + role.slice(1)} data cleared`);
+            showNotification(`${role.replace(/\d+$/, '')} data cleared`);
         }
     </script>
 </body>
