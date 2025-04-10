@@ -1427,7 +1427,7 @@
     </div>
 
     <script>
-        // Toggle dark mode
+        // Replace the existing theme toggle JavaScript with this updated version
         function toggleDarkMode() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -1440,7 +1440,7 @@
                 localStorage.setItem('theme', 'dark');
             }
         }
-    
+        
         // Initialize theme from local storage
         function initializeTheme() {
             const savedTheme = localStorage.getItem('theme');
