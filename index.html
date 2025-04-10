@@ -75,16 +75,6 @@
             font-style: italic;
         }
 
-        .shark-train {
-            font-size: 0.9rem;
-            background-color: var(--accent);
-            color: var(--dark);
-            padding: 2px 8px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
         .save-container {
             text-align: right;
         }
@@ -160,18 +150,13 @@
         }
 
         .gunner {
-            grid-column: span 6;
+            grid-column: span 12;
             border-top-color: #d32f2f;
         }
 
         .boatswain {
-            grid-column: span 6;
-            border-top-color: #388e3c;
-        }
-
-        .weapons {
             grid-column: span 12;
-            margin-top: 10px;
+            border-top-color: #388e3c;
         }
 
         .role-badge {
@@ -295,26 +280,82 @@
             border-radius: 5px;
             margin-bottom: 10px;
             border-left: 4px solid var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .power-module.active {
+            background-color: rgba(56, 142, 60, 0.15);
+            border-left-color: #388e3c;
+        }
+
+        .power-module:hover {
+            transform: translateX(5px);
+        }
+
+        .power-info {
+            flex: 1;
         }
 
         .power-name {
             font-weight: bold;
             color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .power-cost {
-            float: right;
             background-color: var(--secondary);
             color: white;
             padding: 2px 8px;
             border-radius: 10px;
             font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        .power-hp {
+            margin-left: 15px;
+            font-size: 0.9rem;
+            color: #555;
         }
 
         .power-desc {
             font-size: 0.9rem;
             margin-top: 5px;
             color: #555;
+        }
+
+        .power-toggle {
+            width: 40px;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .power-toggle::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .power-module.active .power-toggle {
+            background-color: #388e3c;
+        }
+
+        .power-module.active .power-toggle::after {
+            left: 22px;
         }
 
         .resource-tracker {
@@ -435,12 +476,156 @@
             opacity: 1;
         }
 
-        .shark-feature {
-            margin-top: 15px;
+        .command-options {
+            display: flex;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .command-option {
+            flex: 1;
             padding: 10px;
-            background-color: rgba(255, 204, 0, 0.1);
+            border: 2px solid #ddd;
             border-radius: 5px;
-            border-left: 4px solid var(--accent);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .command-option.selected {
+            border-color: #6a1b9a;
+            background-color: rgba(106, 27, 154, 0.1);
+        }
+
+        .crew-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .crew-table th {
+            background-color: var(--secondary);
+            color: white;
+            text-align: left;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .crew-table td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .crew-count {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .crew-count-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .crew-count-value {
+            background-color: var(--light);
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .movement-details {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: 5px;
+        }
+
+        .movement-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .movement-label {
+            font-weight: bold;
+            color: var(--secondary);
+            min-width: 160px;
+        }
+
+        .movement-value {
+            font-weight: bold;
+        }
+
+        .movement-note {
+            font-size: 0.8rem;
+            color: #777;
+            margin-left: 10px;
+            font-style: italic;
+        }
+
+        .weapon-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .weapon-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .weapon-header {
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .weapon-property-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .number-input {
+            width: 60px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .power-charge-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .power-charge-label {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        .power-charge-input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .active-modules-counter {
+            background-color: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-left: 10px;
         }
 
         @media print {
@@ -460,13 +645,12 @@
 </head>
 <body>
     <div class="sheet-container">
-        <img src="/api/placeholder/800/600" alt="Hammerhead Ship Silhouette" class="watermark">
+        <img src="/api/placeholder/800/600" alt="Ship Silhouette" class="watermark">
         
         <div class="sheet-header">
             <div>
                 <input type="text" class="ship-name" value="Oceans Court Express" id="shipName">
                 <div class="ship-class">Frigate Class (2×2)</div>
-                <div class="shark-train">Hammerhead Shark Train</div>
             </div>
             <div class="save-container">
                 <button class="save-btn" onclick="saveSheet()">SAVE SHEET</button>
@@ -497,11 +681,6 @@
                         <input type="number" class="stat-value" value="30" id="airSupply">
                     </div>
                 </div>
-                
-                <div class="shark-feature">
-                    <div class="ability-name">Shark Sense</div>
-                    <div class="ability-desc">The hammerhead design grants enhanced spatial awareness. The ship gains advantage on checks to detect objects or other vessels in The Phlogiston within 1000 feet.</div>
-                </div>
             </div>
             
             <!-- Movement Section -->
@@ -509,18 +688,28 @@
                 <h2 class="section-title">
                     <i>🧭</i> Movement Attributes
                 </h2>
-                <div class="stat-grid">
-                    <div class="stat-block">
-                        <label class="stat-label">Base Velocity</label>
-                        <input type="number" class="stat-value" value="500" id="baseVelocity"> ft/round
+                
+                <div class="movement-details">
+                    <div class="movement-item">
+                        <div class="movement-label">Starting Base Velocity:</div>
+                        <div class="movement-value">500 feet</div>
                     </div>
-                    <div class="stat-block">
-                        <label class="stat-label">Max Acceleration</label>
-                        <input type="number" class="stat-value" value="200" id="maxAccel"> ft/round
+                    <div class="movement-item">
+                        <div class="movement-label">Max Acceleration:</div>
+                        <div class="movement-value">200 ft./round</div>
+                        <div class="movement-note">OR 600 ft./round IF you overdrive (risk of overload)</div>
                     </div>
+                    <div class="movement-item">
+                        <div class="movement-label">Max Deceleration:</div>
+                        <div class="movement-value">200 ft./round</div>
+                        <div class="movement-note">OR 600 ft./round IF you use the emergency brake (risk of damage)</div>
+                    </div>
+                </div>
+                
+                <div class="stat-grid" style="margin-top: 15px;">
                     <div class="stat-block">
-                        <label class="stat-label">Max Deceleration</label>
-                        <input type="number" class="stat-value" value="200" id="maxDecel"> ft/round
+                        <label class="stat-label">Current Velocity</label>
+                        <input type="number" class="stat-value" value="500" id="currentVelocity"> ft/round
                     </div>
                     <div class="stat-block">
                         <label class="stat-label">Current Direction</label>
@@ -536,11 +725,6 @@
                         </select>
                     </div>
                 </div>
-                
-                <div class="shark-feature">
-                    <div class="ability-name">Streamlined Hull</div>
-                    <div class="ability-desc">The shark-like design reduces fluid resistance. When moving in a straight line for at least two consecutive turns, the ship can accelerate an additional 50 ft/round.</div>
-                </div>
             </div>
             
             <!-- Crew Section -->
@@ -548,18 +732,68 @@
                 <h2 class="section-title">
                     <i>👥</i> Crew Details
                 </h2>
-                <div class="stat-grid">
-                    <div class="stat-block">
-                        <label class="stat-label">Minimum Crew</label>
-                        <input type="number" class="stat-value" value="5" id="minCrew">
+                
+                <div class="crew-count">
+                    <div class="crew-count-label">Current Crew:</div>
+                    <div class="crew-count-value">
+                        <span id="currentCrewCount">5</span>/15
                     </div>
-                    <div class="stat-block">
-                        <label class="stat-label">Maximum Crew</label>
-                        <input type="number" class="stat-value" value="15" id="maxCrew">
-                    </div>
+                    <div style="margin-left: 10px; font-size: 0.8rem; color: #777;">(Minimum: 5)</div>
                 </div>
                 
-                <div class="crew-roles">
+                <table class="crew-table">
+                    <thead>
+                        <tr>
+                            <th>Crew Type</th>
+                            <th>Cost per Day</th>
+                            <th>Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Green Crew (CR 1/8)</td>
+                            <td>1.5 gp</td>
+                            <td>
+                                <input type="number" class="number-input crew-number" value="0" min="0" data-cost="1.5" id="greenCrew">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mercenaries (CR 1/2)</td>
+                            <td>3 gp</td>
+                            <td>
+                                <input type="number" class="number-input crew-number" value="0" min="0" data-cost="3" id="mercenaries">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Veteran Crew (CR 1/2 or CR 2)</td>
+                            <td>5 gp</td>
+                            <td>
+                                <input type="number" class="number-input crew-number" value="0" min="0" data-cost="5" id="veteranCrew">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Giff Mercenaries (CR 3)</td>
+                            <td>6.5 gp</td>
+                            <td>
+                                <input type="number" class="number-input crew-number" value="0" min="0" data-cost="6.5" id="giffMercenaries">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Hurwaeti Mercenaries (CR 4)</td>
+                            <td>8 gp</td>
+                            <td>
+                                <input type="number" class="number-input crew-number" value="0" min="0" data-cost="8" id="hurwaetiMercenaries">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 15px; display: flex; justify-content: space-between;">
+                    <div style="font-weight: bold;">Daily Crew Cost:</div>
+                    <div id="dailyCrewCost">0 gp</div>
+                </div>
+                
+                <div class="crew-roles" style="margin-top: 20px;">
                     <div class="crew-role">
                         <div class="crew-role-name">Captain:</div>
                         <input type="text" class="crew-role-player" id="captainPlayer" placeholder="Player name...">
@@ -586,12 +820,14 @@
                     <i>🎖️</i> Captain's Station
                 </h2>
                 
-                <div class="ability-list">
-                    <div class="ability-item">
-                        <div class="ability-name">Ship Initiative</div>
-                        <div class="ability-desc">As Captain, you roll initiative for the ship in combat.</div>
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <label class="stat-label">Ship Initiative</label>
+                        <input type="number" class="stat-value" value="+2" id="shipInitiative">
                     </div>
-                    
+                </div>
+                
+                <div class="ability-list">
                     <div class="ability-item">
                         <div class="ability-name">Hailing</div>
                         <div class="ability-desc">You can hail other vessels, functioning as a Sending spell to communicate with another ship's Captain.</div>
@@ -599,12 +835,19 @@
                     
                     <div class="ability-item">
                         <div class="ability-name">Captain's Commands</div>
-                        <div class="ability-desc">At the beginning of combat, issue one of these commands:</div>
-                        <ul style="margin-left: 20px; margin-top: 5px;">
-                            <li>Allow Gunner to make an additional weapon attack</li>
-                            <li>Enable Boatswain to allocate one additional power</li>
-                            <li>Permit Helmsman to accelerate/decelerate one extra time</li>
-                        </ul>
+                        <div class="ability-desc">At the beginning of combat, select one command:</div>
+                    </div>
+                </div>
+                
+                <div class="command-options">
+                    <div class="command-option" onclick="selectCommand(this, 'gunner')" id="gunnerCommand">
+                        Allow Gunner additional weapon attack
+                    </div>
+                    <div class="command-option" onclick="selectCommand(this, 'boatswain')" id="boatswainCommand">
+                        Enable Boatswain additional power
+                    </div>
+                    <div class="command-option" onclick="selectCommand(this, 'helmsman')" id="helmsmanCommand">
+                        Permit Helmsman extra acceleration/deceleration
                     </div>
                 </div>
                 
@@ -620,11 +863,6 @@
                         <div class="ability-name">To Me, Ocean Court</div>
                         <div class="ability-desc">Call a boarding/defense party. Crew members who haven't taken their turn teleport to your position.</div>
                     </div>
-                    
-                    <div class="ability-item">
-                        <div class="ability-name">Shark's Intimidation</div>
-                        <div class="ability-desc">Once per encounter, use the hammerhead silhouette to make an Intimidation check against an enemy vessel with advantage.</div>
-                    </div>
                 </div>
             </div>
             
@@ -635,14 +873,40 @@
                     <i>🧭</i> Helm Control
                 </h2>
                 
-                <div class="stat-grid">
+                <div class="movement-details">
+                    <div class="movement-item">
+                        <div class="movement-label">Starting Base Velocity:</div>
+                        <div class="movement-value">500 feet</div>
+                    </div>
+                    <div class="movement-item">
+                        <div class="movement-label">Max Acceleration:</div>
+                        <div class="movement-value">200 ft./round</div>
+                        <div class="movement-note">OR 600 ft./round IF you overdrive (risk of overload)</div>
+                    </div>
+                    <div class="movement-item">
+                        <div class="movement-label">Max Deceleration:</div>
+                        <div class="movement-value">200 ft./round</div>
+                        <div class="movement-note">OR 600 ft./round IF you use the emergency brake (risk of damage)</div>
+                    </div>
+                </div>
+                
+                <div class="stat-grid" style="margin-top: 15px;">
                     <div class="stat-block">
                         <label class="stat-label">Current Velocity</label>
-                        <input type="number" class="stat-value" value="500" id="currentVelocity"> ft/round
+                        <input type="number" class="stat-value" value="500" id="currentVelocityHelm"> ft/round
                     </div>
                     <div class="stat-block">
-                        <label class="stat-label">Emergency Acceleration (3×)</label>
-                        <input type="number" class="stat-value" value="600" id="emergencyAccel"> ft/round
+                        <label class="stat-label">Current Direction</label>
+                        <select class="stat-value" id="currentDirectionHelm">
+                            <option value="N">North</option>
+                            <option value="NE">Northeast</option>
+                            <option value="E" selected>East</option>
+                            <option value="SE">Southeast</option>
+                            <option value="S">South</option>
+                            <option value="SW">Southwest</option>
+                            <option value="W">West</option>
+                            <option value="NW">Northwest</option>
+                        </select>
                     </div>
                 </div>
                 
@@ -665,34 +929,90 @@
                     <div class="maneuver-title">Maneuver - Jamming <span class="maneuver-level">(3rd-level)</span></div>
                     <div class="ability-desc">Expend a 3rd-level spell slot to match speed and acceleration of a target vessel within 5 feet for 1 minute.</div>
                 </div>
-                
-                <div class="shark-feature">
-                    <div class="ability-name">Hammerhead Drift</div>
-                    <div class="ability-desc">The unique design of the ship allows for sudden lateral moves. Once per combat, you can move the ship 100 feet in any direction without changing velocity.</div>
-                </div>
             </div>
             
-            <!-- Gunner Section -->
+            <!-- Gunner Section with Weapons -->
             <div class="section gunner">
                 <span class="role-badge">GUNNER</span>
                 <h2 class="section-title">
                     <i>🎯</i> Weapons Control
                 </h2>
                 
-                <div class="ability-item">
-                    <div class="ability-name">Weapon Proficiency</div>
-                    <div class="ability-desc">Add your DEX modifier + proficiency bonus to attack and damage rolls.</div>
-                </div>
-                
                 <div class="stat-grid">
                     <div class="stat-block">
                         <label class="stat-label">Attack Bonus</label>
                         <input type="number" class="stat-value" value="+6" id="attackBonus">
                     </div>
-                    <div class="stat-block">
-                        <label class="stat-label">Module HP</label>
-                        <input type="number" class="stat-value" value="10" id="moduleHP">
+                </div>
+                
+                <div class="ability-item" style="margin-top: 10px;">
+                    <div class="ability-name">Weapon Proficiency</div>
+                    <div class="ability-desc">Add your DEX modifier + proficiency bonus to attack and damage rolls with ship weapons.</div>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <h3 style="color: #d32f2f; margin-bottom: 10px;">Ship Weapons</h3>
+                    
+                    <div class="weapon-row" style="background-color: var(--light); font-weight: bold;">
+                        <div class="weapon-header">Weapon</div>
+                        <div class="weapon-header">Range</div>
+                        <div class="weapon-header">Damage</div>
+                        <div class="weapon-header">Position</div>
+                        <div class="weapon-header">Properties</div>
+                        <div class="weapon-header">HP (10 max)</div>
                     </div>
+                    
+                    <div class="weapon-row">
+                        <div>Flower Cannon</div>
+                        <div>300/900 ft.</div>
+                        <div>3d10 radiant</div>
+                        <div>Right Broadside</div>
+                        <div class="weapon-property-container">
+                            <div class="weapon-property">90° Firing Arc</div>
+                        </div>
+                        <div>
+                            <input type="number" class="number-input" value="10" max="10" min="0" id="rightCannonHP">
+                        </div>
+                    </div>
+                    
+                    <div class="weapon-row">
+                        <div>Flower Cannon</div>
+                        <div>300/900 ft.</div>
+                        <div>3d10 radiant</div>
+                        <div>Left Broadside</div>
+                        <div class="weapon-property-container">
+                            <div class="weapon-property">90° Firing Arc</div>
+                        </div>
+                        <div>
+                            <input type="number" class="number-input" value="10" max="10" min="0" id="leftCannonHP">
+                        </div>
+                    </div>
+                    
+                    <div class="weapon-row">
+                        <div>Carronade</div>
+                        <div>500/1500 ft.</div>
+                        <div>8d10 bludgeoning</div>
+                        <div>Front (Bow)</div>
+                        <div class="weapon-property-container">
+                            <div class="weapon-property">Utilize</div>
+                            <div class="weapon-property">45° Firing Arc</div>
+                            <div class="tooltip"><i>ℹ️</i>
+                                <span class="tooltip-text">Utilize: Once fired, requires another action to charge before firing again.</span>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="number" class="number-input" value="10" max="10" min="0" id="carronadeHP">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="resource-tracker" style="margin-top: 20px;">
+                    <label class="resource-label">Carronade Charge Status:</label>
+                    <div class="resource-boxes" id="carronadeCharge">
+                        <div class="resource-box filled" onclick="toggleResourceBox(this)"></div>
+                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: #666; margin-left: 10px;">Filled = Ready to fire</span>
                 </div>
                 
                 <div class="ability-list">
@@ -707,11 +1027,6 @@
                         <div class="ability-name">Trigger on the Pulse</div>
                         <div class="ability-desc">Ready a ship weapon attack to fire at a specific trigger.</div>
                     </div>
-                    
-                    <div class="ability-item">
-                        <div class="ability-name">Shark's Bite</div>
-                        <div class="ability-desc">When firing the Carronade, you can choose to deal an additional 1d10 damage with a successful hit. The weapon then requires two actions to charge before firing again.</div>
-                    </div>
                 </div>
             </div>
             
@@ -722,51 +1037,85 @@
                     <i>⚡</i> Power Systems
                 </h2>
                 
-                <div class="resource-tracker">
-                    <label class="resource-label">Power Charges (Proficiency Bonus):</label>
-                    <div class="resource-boxes" id="powerCharges">
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
+                <div class="power-charge-container">
+                    <div class="power-charge-label">Available Power Charges:</div>
+                    <input type="number" class="power-charge-input" value="4" min="0" id="availablePowerCharges">
+                    <div>(Proficiency Bonus)</div>
+                    <div class="active-modules-counter">Active: <span id="activeModulesCount">0</span>/<span id="maxModules">4</span></div>
+                </div>
+                
+                <div id="powerModules">
+                    <div class="power-module" onclick="togglePowerModule(this)" data-cost="1" id="weaponsArray">
+                        <div class="power-info">
+                            <div class="power-name">
+                                Weapons Array
+                                <span class="power-cost">1 Charge</span>
+                                <span class="power-hp">HP: <input type="number" class="number-input" style="width: 40px;" value="10" max="10" min="0" id="weaponsArrayHP" onclick="event.stopPropagation();"></span>
+                            </div>
+                            <div class="power-desc">+1d6 damage to all weapon attacks until the start of your next turn</div>
+                        </div>
+                        <div class="power-toggle"></div>
                     </div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">Weapons Array<span class="power-cost">1 Charge</span></div>
-                    <div class="power-desc">+1d6 damage to all weapon attacks until the start of your next turn</div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">Deflector Grid<span class="power-cost">1 Charge</span></div>
-                    <div class="power-desc">Ship gains resistance to one damage type until the start of your next turn</div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">Thruster Override<span class="power-cost">1 Charge</span></div>
-                    <div class="power-desc">+100 feet to the ship's maximum acceleration or deceleration this turn</div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">Hull Reinforcement<span class="power-cost">1 Charge</span></div>
-                    <div class="power-desc">Ship gains 2d8 temporary hit points</div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">System Restoration<span class="power-cost">1 Charge</span></div>
-                    <div class="power-desc">If a weapon system or module has dropped to zero hit points, restore it to functioning at 1 hit point</div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">Warp Core Charge<span class="power-cost">2 Charges</span></div>
-                    <div class="power-desc">After 3 consecutive turns of charging, can initiate warp jump to escape combat</div>
-                </div>
-                
-                <div class="power-module">
-                    <div class="power-name">Shark Acceleration<span class="power-cost">1 Charge</span></div>
-                    <div class="power-desc">Enhanced hammerhead propulsion systems provide an additional 50 ft/round of acceleration for one turn.</div>
+                    
+                    <div class="power-module" onclick="togglePowerModule(this)" data-cost="1" id="deflectorGrid">
+                        <div class="power-info">
+                            <div class="power-name">
+                                Deflector Grid
+                                <span class="power-cost">1 Charge</span>
+                                <span class="power-hp">HP: <input type="number" class="number-input" style="width: 40px;" value="10" max="10" min="0" id="deflectorGridHP" onclick="event.stopPropagation();"></span>
+                            </div>
+                            <div class="power-desc">Ship gains resistance to one damage type until the start of your next turn</div>
+                        </div>
+                        <div class="power-toggle"></div>
+                    </div>
+                    
+                    <div class="power-module" onclick="togglePowerModule(this)" data-cost="1" id="thrusterOverride">
+                        <div class="power-info">
+                            <div class="power-name">
+                                Thruster Override
+                                <span class="power-cost">1 Charge</span>
+                                <span class="power-hp">HP: <input type="number" class="number-input" style="width: 40px;" value="10" max="10" min="0" id="thrusterOverrideHP" onclick="event.stopPropagation();"></span>
+                            </div>
+                            <div class="power-desc">+100 feet to the ship's maximum acceleration or deceleration this turn</div>
+                        </div>
+                        <div class="power-toggle"></div>
+                    </div>
+                    
+                    <div class="power-module" onclick="togglePowerModule(this)" data-cost="1" id="hullReinforcement">
+                        <div class="power-info">
+                            <div class="power-name">
+                                Hull Reinforcement
+                                <span class="power-cost">1 Charge</span>
+                                <span class="power-hp">HP: <input type="number" class="number-input" style="width: 40px;" value="10" max="10" min="0" id="hullReinforcementHP" onclick="event.stopPropagation();"></span>
+                            </div>
+                            <div class="power-desc">Ship gains 2d8 temporary hit points</div>
+                        </div>
+                        <div class="power-toggle"></div>
+                    </div>
+                    
+                    <div class="power-module" onclick="togglePowerModule(this)" data-cost="1" id="systemRestoration">
+                        <div class="power-info">
+                            <div class="power-name">
+                                System Restoration
+                                <span class="power-cost">1 Charge</span>
+                                <span class="power-hp">HP: <input type="number" class="number-input" style="width: 40px;" value="10" max="10" min="0" id="systemRestorationHP" onclick="event.stopPropagation();"></span>
+                            </div>
+                            <div class="power-desc">If a weapon system or module has dropped to zero hit points, restore it to functioning at 1 hit point</div>
+                        </div>
+                        <div class="power-toggle"></div>
+                    </div>
+                    
+                    <div class="power-module" onclick="togglePowerModule(this)" data-cost="2" id="warpCoreCharge">
+                        <div class="power-info">
+                            <div class="power-name">
+                                Warp Core Charge
+                                <span class="power-cost">2 Charges</span>
+                                <span class="power-hp">HP: <input type="number" class="number-input" style="width: 40px;" value="10" max="10" min="0" id="warpCoreChargeHP" onclick="event.stopPropagation();"></span>
+                            </div>
+                            <div class="power-desc">After 3 consecutive turns of charging, can initiate warp jump to escape combat</div>
+                        </div>
+                        <div class="power-toggle"></div>
+                    </div>
                 </div>
                 
                 <div class="ability-list">
@@ -783,89 +1132,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Weapons Section -->
-            <div class="section weapons">
-                <h2 class="section-title">
-                    <i>🔫</i> Ship Weapons
-                </h2>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Weapon</th>
-                            <th>Range</th>
-                            <th>Damage</th>
-                            <th>Position</th>
-                            <th>Special Properties</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Medium Ballista</td>
-                            <td>300/900 ft.</td>
-                            <td>3d10 radiant</td>
-                            <td>Right Broadside</td>
-                            <td>
-                                <div class="weapon-property">90° Firing Arc</div>
-                            </td>
-                            <td>
-                                <select id="rightBallistaStatus">
-                                    <option value="operational">Operational</option>
-                                    <option value="damaged">Damaged</option>
-                                    <option value="destroyed">Destroyed</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Medium Ballista</td>
-                            <td>300/900 ft.</td>
-                            <td>3d10 radiant</td>
-                            <td>Left Broadside</td>
-                            <td>
-                                <div class="weapon-property">90° Firing Arc</div>
-                            </td>
-                            <td>
-                                <select id="leftBallistaStatus">
-                                    <option value="operational">Operational</option>
-                                    <option value="damaged">Damaged</option>
-                                    <option value="destroyed">Destroyed</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Carronade</td>
-                            <td>500/1500 ft.</td>
-                            <td>8d10 bludgeoning</td>
-                            <td>Front (Bow)</td>
-                            <td>
-                                <div class="weapon-property">Utilize</div>
-                                <div class="weapon-property">45° Firing Arc</div>
-                                <div class="tooltip"><i>ℹ️</i>
-                                    <span class="tooltip-text">Utilize: Once fired, requires another action to charge before firing again.</span>
-                                </div>
-                            </td>
-                            <td>
-                                <select id="carronadeStatus">
-                                    <option value="operational">Operational</option>
-                                    <option value="damaged">Damaged</option>
-                                    <option value="destroyed">Destroyed</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="resource-tracker" style="margin-top: 20px;">
-                    <label class="resource-label">Carronade Charge Status:</label>
-                    <div class="resource-boxes" id="carronadeCharge">
-                        <div class="resource-box filled" onclick="toggleResourceBox(this)"></div>
-                        <div class="resource-box" onclick="toggleResourceBox(this)"></div>
-                    </div>
-                    <span style="font-size: 0.8rem; color: #666; margin-left: 10px;">Filled = Ready to fire</span>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -874,6 +1140,89 @@
         function toggleResourceBox(box) {
             box.classList.toggle('filled');
             saveToLocalStorage();
+        }
+        
+        // Toggle captain command selection
+        function selectCommand(option, type) {
+            // Remove selected class from all options
+            document.querySelectorAll('.command-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            option.classList.add('selected');
+            saveToLocalStorage();
+        }
+        
+        // Toggle power module activation
+        function togglePowerModule(module) {
+            // Check if we're activating or deactivating
+            const activating = !module.classList.contains('active');
+            
+            if (activating) {
+                // Check if we have enough power charges
+                const availableCharges = parseInt(document.getElementById('availablePowerCharges').value);
+                const activeModules = document.querySelectorAll('.power-module.active').length;
+                const maxModules = availableCharges;
+                
+                // Update max modules display
+                document.getElementById('maxModules').textContent = maxModules;
+                
+                // Check if we can activate more modules
+                if (activeModules >= maxModules) {
+                    alert('Not enough power charges available! Deactivate another module or increase your available charges.');
+                    return;
+                }
+                
+                // Check module cost
+                const moduleCost = parseInt(module.getAttribute('data-cost'));
+                if (activeModules + moduleCost > maxModules) {
+                    alert(`This module requires ${moduleCost} charges, but you only have ${maxModules - activeModules} available!`);
+                    return;
+                }
+            }
+            
+            // Toggle active state
+            module.classList.toggle('active');
+            
+            // Update active modules counter
+            updateActiveModulesCount();
+            
+            saveToLocalStorage();
+        }
+        
+        // Update active modules counter
+        function updateActiveModulesCount() {
+            const activeModules = document.querySelectorAll('.power-module.active').length;
+            document.getElementById('activeModulesCount').textContent = activeModules;
+        }
+        
+        // Update crew count and daily cost
+        function updateCrewCount() {
+            // Get all player characters (minimum 5)
+            const playerCharacters = 5;
+            
+            // Get additional crew
+            let additionalCrew = 0;
+            let dailyCost = 0;
+            
+            document.querySelectorAll('.crew-number').forEach(input => {
+                const crewCount = parseInt(input.value);
+                const crewCost = parseFloat(input.getAttribute('data-cost'));
+                
+                additionalCrew += crewCount;
+                dailyCost += crewCount * crewCost;
+            });
+            
+            // Update display
+            const totalCrew = playerCharacters + additionalCrew;
+            document.getElementById('currentCrewCount').textContent = totalCrew;
+            document.getElementById('dailyCrewCost').textContent = dailyCost.toFixed(1) + ' gp';
+            
+            // Check if we're over max crew
+            if (totalCrew > 15) {
+                alert('Warning: You have exceeded the maximum crew capacity of 15!');
+            }
         }
         
         // Save all editable content to local storage
@@ -888,13 +1237,22 @@
                 }
             });
             
-            // Save power charges state
-            const powerCharges = document.querySelectorAll('#powerCharges .resource-box');
-            data['powerChargesState'] = Array.from(powerCharges).map(box => box.classList.contains('filled')).join(',');
-            
             // Save carronade charge state
             const carronadeCharge = document.querySelectorAll('#carronadeCharge .resource-box');
             data['carronadeChargeState'] = Array.from(carronadeCharge).map(box => box.classList.contains('filled')).join(',');
+            
+            // Save active power modules
+            const powerModules = document.querySelectorAll('.power-module');
+            data['powerModulesState'] = Array.from(powerModules).map(module => {
+                return {
+                    id: module.id,
+                    active: module.classList.contains('active')
+                };
+            });
+            
+            // Save captain command selection
+            const commandOptions = document.querySelectorAll('.command-option');
+            data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
             
             // Save to local storage
             localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
@@ -923,29 +1281,13 @@
                 
                 // Restore input values
                 Object.keys(data).forEach(key => {
-                    if (key !== 'powerChargesState' && key !== 'carronadeChargeState') {
+                    if (key !== 'carronadeChargeState' && key !== 'powerModulesState' && key !== 'captainCommand') {
                         const element = document.getElementById(key);
                         if (element) {
                             element.value = data[key];
                         }
                     }
                 });
-                
-                // Restore power charges state
-                if (data.powerChargesState) {
-                    const powerCharges = document.querySelectorAll('#powerCharges .resource-box');
-                    const states = data.powerChargesState.split(',').map(state => state === 'true');
-                    
-                    states.forEach((state, index) => {
-                        if (index < powerCharges.length) {
-                            if (state) {
-                                powerCharges[index].classList.add('filled');
-                            } else {
-                                powerCharges[index].classList.remove('filled');
-                            }
-                        }
-                    });
-                }
                 
                 // Restore carronade charge state
                 if (data.carronadeChargeState) {
@@ -962,6 +1304,34 @@
                         }
                     });
                 }
+                
+                // Restore power modules state
+                if (data.powerModulesState) {
+                    data.powerModulesState.forEach(moduleState => {
+                        const module = document.getElementById(moduleState.id);
+                        if (module) {
+                            if (moduleState.active) {
+                                module.classList.add('active');
+                            } else {
+                                module.classList.remove('active');
+                            }
+                        }
+                    });
+                    
+                    // Update active modules counter
+                    updateActiveModulesCount();
+                }
+                
+                // Restore captain command selection
+                if (data.captainCommand !== undefined && data.captainCommand !== -1) {
+                    const commandOptions = document.querySelectorAll('.command-option');
+                    if (commandOptions.length > data.captainCommand) {
+                        commandOptions[data.captainCommand].classList.add('selected');
+                    }
+                }
+                
+                // Update crew count
+                updateCrewCount();
             }
         }
         
@@ -1010,8 +1380,26 @@
             // Set event listeners for all editable elements to save on change
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
-                input.addEventListener('change', saveToLocalStorage);
+                input.addEventListener('change', function() {
+                    // If it's a crew number input, update crew count
+                    if (input.classList.contains('crew-number')) {
+                        updateCrewCount();
+                    }
+                    
+                    // If it's the available power charges input, update max modules
+                    if (input.id === 'availablePowerCharges') {
+                        document.getElementById('maxModules').textContent = input.value;
+                    }
+                    
+                    saveToLocalStorage();
+                });
             });
+            
+            // Initialize crew count
+            updateCrewCount();
+            
+            // Initialize active modules counter
+            updateActiveModulesCount();
         };
         
         // Save to local storage on any change
@@ -1026,13 +1414,22 @@
                 }
             });
             
-            // Save power charges state
-            const powerCharges = document.querySelectorAll('#powerCharges .resource-box');
-            data['powerChargesState'] = Array.from(powerCharges).map(box => box.classList.contains('filled')).join(',');
-            
             // Save carronade charge state
             const carronadeCharge = document.querySelectorAll('#carronadeCharge .resource-box');
             data['carronadeChargeState'] = Array.from(carronadeCharge).map(box => box.classList.contains('filled')).join(',');
+            
+            // Save active power modules
+            const powerModules = document.querySelectorAll('.power-module');
+            data['powerModulesState'] = Array.from(powerModules).map(module => {
+                return {
+                    id: module.id,
+                    active: module.classList.contains('active')
+                };
+            });
+            
+            // Save captain command selection
+            const commandOptions = document.querySelectorAll('.command-option');
+            data['captainCommand'] = Array.from(commandOptions).findIndex(option => option.classList.contains('selected'));
             
             // Save to local storage
             localStorage.setItem('oceansCourtExpressData', JSON.stringify(data));
