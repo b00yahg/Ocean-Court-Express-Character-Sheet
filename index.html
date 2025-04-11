@@ -6,47 +6,49 @@
     <title>Oceans Court Express - Ship Character Sheet</title>
     <style>
         :root {
-            /* Light mode variables */
-            --primary: #1a3a5a;
-            --secondary: #3d6a8a;
-            --accent: #ffcc00;
-            --accent-purple: #9933ff;
+            /* Light mode variables - Y2K Inspired */
+            --primary: #ff66cc;
+            --secondary: #6666ff;
+            --accent: #ffff00;
+            --accent-purple: #cc33ff;
             --accent-pink: #ff33cc;
-            --accent-cyan: #00ccff;
-            --light: #e1eef6;
-            --dark: #0a1a2a;
-            --danger: #d9534f;
-            --success: #5cb85c;
-            --warning: #f0ad4e;
-            --background: #f0f5f9;
-            --text: #0a1a2a;
-            --card-bg: white;
-            --border-color: rgba(0, 204, 255, 0.3);
+            --accent-cyan: #33ccff;
+            --light: #f0f0f0;
+            --dark: #333333;
+            --danger: #ff3366;
+            --success: #33cc99;
+            --warning: #ffcc33;
+            --background: #ffffff;
+            --text: #333333;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(102, 102, 255, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.1);
         }
-    
+        
         [data-theme="dark"] {
-            --primary: #4287f5;
-            --secondary: #7ab2ff;
-            --accent: #ff9900;
-            --accent-purple: #bf7fff;
-            --accent-pink: #ff7fcc;
-            --accent-cyan: #7fddff;
-            --light: #1a2a3a;
-            --dark: #e1eef6;
-            --danger: #ff5c5c;
-            --success: #5cff5c;
-            --warning: #ffad5c;
-            --background: #121820;
-            --text: #e1eef6;
-            --card-bg: #1a2a3a;
-            --border-color: rgba(0, 204, 255, 0.5);
+            --primary: #ff66cc;
+            --secondary: #6666ff;
+            --accent: #ffff00;
+            --accent-purple: #cc33ff;
+            --accent-pink: #ff33cc;
+            --accent-cyan: #33ccff;
+            --light: #222222;
+            --dark: #f0f0f0;
+            --danger: #ff3366;
+            --success: #33cc99;
+            --warning: #ffcc33;
+            --background: #000022;
+            --text: #f0f0f0;
+            --card-bg: rgba(30, 30, 60, 0.9);
+            --border-color: rgba(102, 102, 255, 0.5);
+            --shadow-color: rgba(102, 102, 255, 0.2);
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif; /* Y2K style font */
         }
     
         body {
@@ -54,6 +56,37 @@
             color: var(--text);
             padding: 20px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 2px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 10s linear infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes scanline {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 0 -200px;
+            }
+        }
+        
+        .sheet-container {
+            position: relative;
+            filter: blur(0.4px);
+            border-radius: 10px;
         }
     
         .sheet-container {
@@ -95,9 +128,13 @@
             text-transform: uppercase;
             border-bottom: 2px solid var(--accent);
             margin-bottom: 5px;
-            font-family: 'Orbitron', 'Segoe UI', sans-serif;
-            text-shadow: 0 0 10px var(--accent-cyan);
+            font-family: 'Comic Sans MS', 'Arial', sans-serif; /* Y2K style font */
             letter-spacing: 2px;
+            background: linear-gradient(to right, var(--primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px var(--shadow-color);
         }
     
         .ship-name::after {
@@ -309,11 +346,12 @@
             top: 0;
             z-index: 100;
             background-color: var(--card-bg);
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(5px);
         }
-    
         .fixed-ship-stats {
             position: fixed;
             top: 0;
@@ -321,16 +359,28 @@
             right: 0;
             background-color: var(--card-bg);
             z-index: 999;
-            padding: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 15px;
+            box-shadow: 0 5px 15px var(--shadow-color);
             display: none;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid var(--border-color);
+            backdrop-filter: blur(8px);
         }
-    
+        
         .fixed-ship-stats.visible {
             display: flex;
             justify-content: space-around;
             align-items: center;
+            animation: slideDown 0.3s forwards;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
     
         .fixed-stat {
@@ -431,8 +481,10 @@
             background: transparent;
             border: none;
             text-align: center;
-            font-family: 'Courier New', monospace;
-            text-shadow: 0 0 5px var(--accent-cyan);
+            font-family: 'Arial', sans-serif;
+            box-shadow: inset 0 0 5px var(--shadow-color);
+            border-radius: 5px;
+            padding: 2px 0;
         }
     
         .stat-value:focus {
@@ -860,29 +912,50 @@
             top: 20px;
             right: 20px;
             z-index: 1000;
-            width: 50px;
-            height: 25px;
-            background-color: var(--light);
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(to right, #6666ff, #ff66cc);
             border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px var(--shadow-color);
+            overflow: hidden;
+            border: 2px solid var(--border-color);
         }
-    
-        .theme-toggle::after {
-            content: '';
+        
+        .theme-toggle::before {
+            content: '☀️';
             position: absolute;
-            width: 21px;
-            height: 21px;
+            left: 7px;
+            top: 4px;
+            font-size: 16px;
+            z-index: 2;
+        }
+        
+        .theme-toggle::after {
+            content: '🌙';
+            position: absolute;
+            right: 7px;
+            top: 4px;
+            font-size: 16px;
+            z-index: 2;
+        }
+        
+        .theme-toggle .toggle-slider {
+            position: absolute;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             top: 2px;
             left: 2px;
-            background-color: var(--primary);
+            background-color: white;
             transition: all 0.3s ease;
+            z-index: 3;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
-    
-        [data-theme="dark"] .theme-toggle::after {
-            left: 27px;
+        
+        [data-theme="dark"] .theme-toggle .toggle-slider {
+            left: 32px;
         }
     
         /* Cyberpunk style grid lines */
@@ -902,6 +975,54 @@
             opacity: 0.5;
             border-bottom-right-radius: 5px;
         }
+        .background-selector {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px var(--shadow-color);
+            z-index: 1000;
+            max-width: 300px;
+            border: 2px solid var(--secondary);
+            transform: translateX(250px);
+            transition: transform 0.3s ease;
+        }
+        
+        .background-selector:hover {
+            transform: translateX(0);
+        }
+        
+        .background-selector h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .background-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+        
+        .bg-option {
+            padding: 5px;
+            border-radius: 5px;
+            background: var(--light);
+            color: var(--dark);
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+        
+        .bg-option:hover {
+            background: var(--primary);
+            color: var(--light);
+            transform: scale(1.05);
+        }
     
         @media print {
             body {
@@ -919,7 +1040,9 @@
     </style>
 </head>
 <body>
-    <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode"></div>
+    <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <div class="toggle-slider"></div>
+    </div>
     <div class="fixed-ship-stats" id="fixedStats">
         <div class="fixed-stat">
             <div class="fixed-label">Ship:</div>
@@ -1422,6 +1545,27 @@
                         <div class="ability-desc">When the ship drops below half its hull points, use your reaction to immediately reallocate 1 power charge.</div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="background-selector">
+            <h3>Choose Background</h3>
+            <div class="background-options">
+                <div class="bg-option" data-bg="mtg 1.jpg">MTG 1</div>
+                <div class="bg-option" data-bg="mtg 2.jpg">MTG 2</div>
+                <div class="bg-option" data-bg="mtg 3.jpg">MTG 3</div>
+                <div class="bg-option" data-bg="mtg 4.jpg">MTG 4</div>
+                <div class="bg-option" data-bg="novel 1.png">Novel 1</div>
+                <div class="bg-option" data-bg="novel 2.jpg">Novel 2</div>
+                <div class="bg-option" data-bg="novel 3.jpg">Novel 3</div>
+                <div class="bg-option" data-bg="novel 4.webp">Novel 4</div>
+                <div class="bg-option" data-bg="spelljammer 1.jpg">Spelljammer 1</div>
+                <div class="bg-option" data-bg="spelljammer 2.jpg">Spelljammer 2</div>
+                <div class="bg-option" data-bg="spelljammer 3.jpg">Spelljammer 3</div>
+                <div class="bg-option" data-bg="spelljammer 4.jpg">Spelljammer 4</div>
+                <div class="bg-option" data-bg="y2k 1.jpg">Y2K 1</div>
+                <div class="bg-option" data-bg="y2k 2.webp">Y2K 2</div>
+                <div class="bg-option" data-bg="y2k 3.jpg">Y2K 3</div>
+                <div class="bg-option" data-bg="y2k 4.jpg">Y2K 4</div>
             </div>
         </div>
     </div>
@@ -2212,6 +2356,45 @@
             // Show notification
             showNotification(`${role.replace(/\d+$/, '')} data cleared`);
         }
+        // Background selection functionality
+        function initializeBackgroundSelection() {
+            // Load saved background if exists
+            const savedBg = localStorage.getItem('selectedBackground');
+            if (savedBg) {
+                applyBackground(savedBg);
+            }
+            
+            // Add event listeners to background options
+            const bgOptions = document.querySelectorAll('.bg-option');
+            bgOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const bgFile = this.getAttribute('data-bg');
+                    applyBackground(bgFile);
+                    
+                    // Save selection to localStorage
+                    localStorage.setItem('selectedBackground', bgFile);
+                });
+            });
+        }
+        
+        function applyBackground(bgFile) {
+            // Change watermark image
+            const watermark = document.querySelector('.watermark');
+            if (watermark) {
+                // For local files, adjust path as needed
+                watermark.src = bgFile;
+                watermark.style.opacity = '0.1'; // Adjust opacity as needed
+            }
+            
+            // Optionally, also change body background
+            document.body.style.backgroundImage = `url(${bgFile})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundAttachment = 'fixed';
+            document.body.style.backgroundPosition = 'center';
+        }
+        
+        // Initialize background selection when window loads
+        window.addEventListener('load', initializeBackgroundSelection);
     </script>
 </body>
 </html>
