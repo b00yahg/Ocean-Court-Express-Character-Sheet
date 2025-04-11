@@ -45,42 +45,46 @@
         }
         
         * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif; /* Y2K style font */
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Courier New', monospace; /* More technical/computer-like font */
         }
     
+        /* Improved CRT effect that will cover the entire page */
         body {
-            background-color: var(--background);
-            color: var(--text);
-            padding: 20px;
-            transition: all 0.3s ease;
-            position: relative;
+          position: relative;
+          overflow-x: hidden; /* Prevent horizontal scrolling */
         }
         
         body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 2px;
-            pointer-events: none;
-            z-index: 1000;
-            animation: scanline 10s linear infinite;
-            opacity: 0.3;
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+          background-size: 100% 2px;
+          pointer-events: none;
+          z-index: 2000; /* Higher z-index to ensure it appears above everything */
+          animation: scanline 10s linear infinite;
+          opacity: 0.3;
         }
         
-        @keyframes scanline {
-            from {
-                background-position: 0 0;
-            }
-            to {
-                background-position: 0 -200px;
-            }
+        /* Add subtle screen flicker animation for CRT effect */
+        @keyframes flicker {
+          0% { opacity: 0.97; }
+          3% { opacity: 0.99; }
+          7% { opacity: 0.96; }
+          13% { opacity: 1; }
+          100% { opacity: 0.98; }
+        }
+        
+        .sheet-container {
+          position: relative;
+          animation: flicker 6s infinite;
+          box-shadow: 0 0 20px rgba(66, 220, 219, 0.2); /* Subtle glow for CRT look */
         }
         
         .sheet-container {
@@ -122,19 +126,15 @@
         }
     
         .ship-name {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--accent);
-            margin-bottom: 5px;
-            font-family: 'Comic Sans MS', 'Arial', sans-serif; /* Y2K style font */
-            letter-spacing: 2px;
-            background: linear-gradient(to right, var(--primary), var(--accent-cyan));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px var(--shadow-color);
+          font-size: 2.5rem;
+          font-weight: bold;
+          text-transform: uppercase;
+          border-bottom: 2px solid var(--accent-cyan);
+          margin-bottom: 5px;
+          font-family: 'Lucida Console', 'Courier New', monospace; /* Tech-oriented font */
+          letter-spacing: 2px;
+          color: var(--accent-cyan);
+          text-shadow: 0 0 10px rgba(51, 204, 255, 0.5); /* Subtle glow */
         }
     
         .ship-name::after {
@@ -303,12 +303,15 @@
         }
     
         .section-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: var(--accent-cyan);
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          font-family: 'Lucida Console', 'Courier New', monospace;
+          text-transform: uppercase;
+          letter-spacing: 1px;
         }
     
         .section-title i {
@@ -342,29 +345,30 @@
         }
     
         .stats-container {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px var(--shadow-color);
-            border: 2px solid var(--border-color);
-            backdrop-filter: blur(5px);
+          position: relative; /* Changed from sticky to ensure it stays visible */
+          z-index: 100;
+          background-color: var(--card-bg);
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0 5px 15px var(--shadow-color);
+          border: 2px solid var(--border-color);
+          backdrop-filter: blur(5px);
+          margin-bottom: 15px;
         }
+        
         .fixed-ship-stats {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--card-bg);
-            z-index: 999;
-            padding: 15px;
-            box-shadow: 0 5px 15px var(--shadow-color);
-            display: none;
-            transition: all 0.3s ease;
-            border-bottom: 2px solid var(--border-color);
-            backdrop-filter: blur(8px);
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          background-color: var(--card-bg);
+          z-index: 999;
+          padding: 15px;
+          box-shadow: 0 5px 15px var(--shadow-color);
+          display: none;
+          transition: all 0.3s ease;
+          border-bottom: 2px solid var(--border-color);
+          backdrop-filter: blur(8px);
         }
         
         .fixed-ship-stats.visible {
@@ -474,17 +478,15 @@
         }
     
         .stat-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--dark);
-            width: 100%;
-            background: transparent;
-            border: none;
-            text-align: center;
-            font-family: 'Arial', sans-serif;
-            box-shadow: inset 0 0 5px var(--shadow-color);
-            border-radius: 5px;
-            padding: 2px 0;
+          font-size: 1.3rem;
+          font-weight: bold;
+          color: var(--accent-cyan);
+          width: 100%;
+          background: transparent;
+          border: none;
+          text-align: center;
+          font-family: 'Courier New', monospace;
+          text-shadow: 0 0 5px rgba(51, 204, 255, 0.3); /* Very subtle glow */
         }
     
         .stat-value:focus {
@@ -911,7 +913,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 2001px;
             width: 60px;
             height: 30px;
             background: linear-gradient(to right, #6666ff, #ff66cc);
@@ -975,53 +977,197 @@
             opacity: 0.5;
             border-bottom-right-radius: 5px;
         }
+        .background-selector-button {
+          background-color: var(--secondary);
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 0.9rem;
+          transition: all 0.3s;
+          margin-left: 10px;
+        }
+        
+        .background-selector-button:hover {
+          background-color: var(--primary);
+          transform: translateY(-2px);
+          box-shadow: 0 0 10px var(--shadow-color);
+        }
+        
+        .background-selector {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: var(--card-bg);
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+          z-index: 2001;
+          max-width: 80%;
+          max-height: 80%;
+          overflow-y: auto;
+          border: 2px solid var(--border-color);
+          display: none;
+        }
+        
+        .background-selector.visible {
+          display: block;
+          animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        .background-options {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 10px;
+        }
+        
+        .bg-option {
+          position: relative;
+          padding-bottom: 75%; /* 4:3 aspect ratio */
+          overflow: hidden;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        
+        .bg-option img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        .bg-option:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        
+        .bg-option-title {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(0, 0, 0, 0.6);
+          color: white;
+          padding: 5px;
+          text-align: center;
+          font-size: 0.8rem;
+        }
+        
+        .background-selector-close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: none;
+          border: none;
+          color: var(--text);
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+        .background-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-right: 10px;
+        }
+        
+        .background-btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        
         .background-selector {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: var(--card-bg);
-            padding: 10px;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 15px var(--shadow-color);
-            z-index: 1000;
-            max-width: 300px;
-            border: 2px solid var(--secondary);
-            transform: translateX(250px);
-            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px var(--shadow-color);
+            z-index: 2001;
+            width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid var(--border-color);
+            display: none;
         }
         
-        .background-selector:hover {
-            transform: translateX(0);
+        .background-selector.active {
+            display: block;
         }
         
-        .background-selector h3 {
-            margin-bottom: 10px;
+        .background-selector-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .background-selector-header h3 {
+            margin: 0;
             color: var(--primary);
-            text-align: center;
-            font-size: 1rem;
+        }
+        
+        .background-selector-close {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
         }
         
         .background-options {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
+            gap: 15px;
         }
         
         .bg-option {
-            padding: 5px;
+            position: relative;
             border-radius: 5px;
-            background: var(--light);
-            color: var(--dark);
-            text-align: center;
+            overflow: hidden;
             cursor: pointer;
-            font-size: 0.7rem;
             transition: all 0.2s;
+            height: 100px;
+        }
+        
+        .bg-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .bg-option:hover {
-            background: var(--primary);
-            color: var(--light);
             transform: scale(1.05);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        
+        .bg-option-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px;
+            text-align: center;
+            font-size: 0.8rem;
         }
     
         @media print {
@@ -1071,6 +1217,7 @@
                 <div class="ship-class">Frigate Class (2×2)</div>
             </div>
             <div class="save-container">
+                <button class="background-btn" onclick="toggleBackgroundSelector()">CHANGE BACKGROUND</button>
                 <button class="save-btn" onclick="saveSheet()">SAVE SHEET</button>
             </div>
         </div>
@@ -1547,31 +1694,81 @@
                 </div>
             </div>
         </div>
-        <div class="background-selector">
-            <h3>Choose Background</h3>
+        <div class="background-selector" id="backgroundSelector">
+            <div class="background-selector-header">
+                <h3>Choose Background</h3>
+                <button class="background-selector-close" onclick="toggleBackgroundSelector()">&times;</button>
+            </div>
             <div class="background-options">
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/Mtg%201.jpg">MTG 1</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%202.jpg">MTG 2</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%203.jpg">MTG 3</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%204.jpg">MTG 4</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%201.png">Novel 1</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%202.jpg">Novel 2</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%203.jpg">Novel 3</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%204.webp">Novel 4</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammer%203.jpg">Spelljammer 3</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammer%204.jpg">Spelljammer 4</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammmmer%201.jpg">Spelljammer 1</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammmmer%202.jpg">Spelljammer 2</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%201.jpg">Y2K 1</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%202.webp">Y2K 2</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%203.jpg">Y2K 3</div>
-                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%204.jpg">Y2K 4</div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/Mtg%201.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/Mtg%201.jpg" alt="MTG 1">
+                    <div class="bg-option-title">MTG 1</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%202.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%202.jpg" alt="MTG 2">
+                    <div class="bg-option-title">MTG 2</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%203.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%203.jpg" alt="MTG 3">
+                    <div class="bg-option-title">MTG 3</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%204.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/mtg%204.jpg" alt="MTG 4">
+                    <div class="bg-option-title">MTG 4</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%201.png">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%201.png" alt="Novel 1">
+                    <div class="bg-option-title">Novel 1</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%202.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%202.jpg" alt="Novel 2">
+                    <div class="bg-option-title">Novel 2</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%203.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%203.jpg" alt="Novel 3">
+                    <div class="bg-option-title">Novel 3</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%204.webp">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/novel%204.webp" alt="Novel 4">
+                    <div class="bg-option-title">Novel 4</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammer%203.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammer%203.jpg" alt="Spelljammer 3">
+                    <div class="bg-option-title">Spelljammer 3</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammer%204.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammer%204.jpg" alt="Spelljammer 4">
+                    <div class="bg-option-title">Spelljammer 4</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammmmer%201.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammmmer%201.jpg" alt="Spelljammer 1">
+                    <div class="bg-option-title">Spelljammer 1</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammmmer%202.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/spelljammmmer%202.jpg" alt="Spelljammer 2">
+                    <div class="bg-option-title">Spelljammer 2</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%201.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%201.jpg" alt="Y2K 1">
+                    <div class="bg-option-title">Y2K 1</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%202.webp">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%202.webp" alt="Y2K 2">
+                    <div class="bg-option-title">Y2K 2</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%203.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%203.jpg" alt="Y2K 3">
+                    <div class="bg-option-title">Y2K 3</div>
+                </div>
+                <div class="bg-option" data-bg="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%204.jpg">
+                    <img src="https://raw.githubusercontent.com/b00yahg/Ocean-Court-Express-Character-Sheet/main/y2k%204.jpg" alt="Y2K 4">
+                    <div class="bg-option-title">Y2K 4</div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Replace the existing theme toggle JavaScript with this updated version
         function toggleDarkMode() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -1920,7 +2117,9 @@
             // Load saved data
             loadFromLocalStorage();
             addImportButton();
-            
+
+            // Initialize background selection
+            initializeBackgroundSelection();
             // Set event listeners for all editable elements to save on change
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
@@ -1947,8 +2146,10 @@
             document.getElementById('tempHP').addEventListener('input', updateFixedHeaderValues);
             
             // Add dark mode toggle event listener
-            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
-            
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                toggleDarkMode();
+                console.log('Theme toggle clicked'); // For debugging
+            });            
             // Add scroll event listener for fixed header
             window.addEventListener('scroll', handleFixedHeader);
             
@@ -2357,6 +2558,11 @@
             showNotification(`${role.replace(/\d+$/, '')} data cleared`);
         }
         // Background selection functionality
+        function toggleBackgroundSelector() {
+            const selector = document.getElementById('backgroundSelector');
+            selector.classList.toggle('active');
+        }
+        
         function initializeBackgroundSelection() {
             // Load saved background if exists
             const savedBg = localStorage.getItem('selectedBackground');
@@ -2373,6 +2579,9 @@
                     
                     // Save selection to localStorage
                     localStorage.setItem('selectedBackground', bgFile);
+                    
+                    // Hide selector after selection
+                    toggleBackgroundSelector();
                 });
             });
         }
@@ -2381,12 +2590,11 @@
             // Change watermark image
             const watermark = document.querySelector('.watermark');
             if (watermark) {
-                // For local files, adjust path as needed
                 watermark.src = bgFile;
                 watermark.style.opacity = '0.1'; // Adjust opacity as needed
             }
             
-            // Optionally, also change body background
+            // Apply background to body
             document.body.style.backgroundImage = `url(${bgFile})`;
             document.body.style.backgroundSize = 'cover';
             document.body.style.backgroundAttachment = 'fixed';
