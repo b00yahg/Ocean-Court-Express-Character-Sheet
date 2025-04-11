@@ -345,7 +345,7 @@
         }
     
         .stats-container {
-            position: sticky; /* Change back to sticky */
+            position: sticky;
             top: 0;
             z-index: 100;
             background-color: var(--card-bg);
@@ -355,6 +355,7 @@
             border: 2px solid var(--border-color);
             backdrop-filter: blur(5px);
             margin-bottom: 15px;
+            display: block; /* Ensure it's visible */
         }
         
         .fixed-ship-stats {
@@ -1015,8 +1016,8 @@
         }
         
         .background-selector.visible {
-          display: block;
-          animation: fadeIn 0.3s forwards;
+            display: block;
+            animation: fadeIn 0.3s forwards;
         }
         
         @keyframes fadeIn {
@@ -1925,15 +1926,21 @@
         }
         // Handle fixed header visibility
         function handleFixedHeader() {
+            console.log('Checking scroll position');
             const statsContainer = document.querySelector('.stats-container');
             const fixedStats = document.getElementById('fixedStats');
             
             if (statsContainer) {
                 const rect = statsContainer.getBoundingClientRect();
-                if (rect.bottom < 0) {
+                console.log('Stats container position:', rect.top, rect.bottom);
+                
+                // Show fixed header when original stats are scrolled out of view
+                if (rect.top < -100) {
                     fixedStats.classList.add('visible');
+                    console.log('Fixed stats shown');
                 } else {
                     fixedStats.classList.remove('visible');
+                    console.log('Fixed stats hidden');
                 }
             }
         }
@@ -2152,8 +2159,12 @@
                 toggleDarkMode();
                 console.log('Theme toggle clicked'); // For debugging
             });            
-            // Add scroll event listener for fixed header
+            // Make sure this is in your window.onload function
             window.addEventListener('scroll', handleFixedHeader);
+            console.log('Scroll event listener added');
+            
+            // Trigger once on page load to check initial state
+            handleFixedHeader();
             
             // Initialize fixed header values
             updateFixedHeaderValues();
@@ -2561,8 +2572,13 @@
         }
         // Background selection functionality
         function toggleBackgroundSelector() {
+            console.log('Background selector toggle called');
             const selector = document.getElementById('backgroundSelector');
+            console.log('Selector element:', selector);
+            
+            // Use 'visible' class consistently (not 'active')
             selector.classList.toggle('visible');
+            console.log('After toggle:', selector.classList);
         }
         
         function initializeBackgroundSelection() {
