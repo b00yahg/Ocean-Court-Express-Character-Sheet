@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oceans Court Express - Ship Character Sheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&family=Quantico:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Light mode variables - Subtle Y2K Inspired */
@@ -45,10 +48,10 @@
         }
         
         * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-          font-family: 'Courier New', monospace; /* More technical/computer-like font */
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Exo 2', sans-serif; /* Base font for most content */
         }
     
         /* Improved CRT effect that will cover the entire page */
@@ -133,10 +136,10 @@
           text-transform: uppercase;
           border-bottom: 2px solid var(--accent-cyan);
           margin-bottom: 5px;
-          font-family: 'Lucida Console', 'Courier New', monospace; /* Tech-oriented font */
+          font-family: 'Quantico', sans-serif;
           letter-spacing: 2px;
           color: var(--accent-cyan);
-          text-shadow: 0 0 10px rgba(51, 204, 255, 0.5); /* Subtle glow */
+          text-shadow: 0 0 10px rgba(51, 204, 255, 0.5);
         }
     
         .ship-name::after {
@@ -311,7 +314,7 @@
           margin-bottom: 10px;
           display: flex;
           align-items: center;
-          font-family: 'Lucida Console', 'Courier New', monospace;
+          font-family: 'Quantico', sans-serif;
           text-transform: uppercase;
           letter-spacing: 1px;
         }
@@ -403,8 +406,9 @@
         .fixed-value {
             font-size: 1.2rem;
             font-weight: bold;
-            font-family: 'Courier New', monospace;
+            font-family: 'Exo 2', sans-serif;
             text-shadow: 0 0 5px var(--accent-cyan);
+            color: var(--text);
         }
     
         .crew-container {
@@ -707,6 +711,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.2s;
+            color: var(--text);
         }
     
         .command-option.selected {
