@@ -7,41 +7,41 @@
     <style>
         :root {
             /* Light mode variables - Y2K Inspired */
-            --primary: #ff66cc;
-            --secondary: #6666ff;
-            --accent: #ffff00;
-            --accent-purple: #cc33ff;
-            --accent-pink: #ff33cc;
+            --primary: #ff66aa;
+            --secondary: #5599ff;
+            --accent: #ffcc00;
+            --accent-purple: #aa66cc;
+            --accent-pink: #ff55aa;
             --accent-cyan: #33ccff;
-            --light: #f0f0f0;
-            --dark: #333333;
-            --danger: #ff3366;
-            --success: #33cc99;
-            --warning: #ffcc33;
+            --light: #f5f5f5;
+            --dark: #444444;
+            --danger: #ff5566;
+            --success: #44dd99;
+            --warning: #ffaa33;
             --background: #ffffff;
-            --text: #333333;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --border-color: rgba(102, 102, 255, 0.3);
+            --text: #444444;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(85, 153, 255, 0.4);
             --shadow-color: rgba(0, 0, 0, 0.1);
         }
         
         [data-theme="dark"] {
-            --primary: #ff66cc;
-            --secondary: #6666ff;
-            --accent: #ffff00;
-            --accent-purple: #cc33ff;
-            --accent-pink: #ff33cc;
-            --accent-cyan: #33ccff;
-            --light: #222222;
-            --dark: #f0f0f0;
+            --primary: #00ccff;
+            --secondary: #6633ff;
+            --accent: #33ff99;
+            --accent-purple: #bb33ff;
+            --accent-pink: #ff33aa;
+            --accent-cyan: #00eeff;
+            --light: #112233;
+            --dark: #eeeeff;
             --danger: #ff3366;
-            --success: #33cc99;
-            --warning: #ffcc33;
-            --background: #000022;
-            --text: #f0f0f0;
-            --card-bg: rgba(30, 30, 60, 0.9);
-            --border-color: rgba(102, 102, 255, 0.5);
-            --shadow-color: rgba(102, 102, 255, 0.2);
+            --success: #00cc99;
+            --warning: #ffbb33;
+            --background: #001122;
+            --text: #ccddff;
+            --card-bg: rgba(10, 20, 40, 0.9);
+            --border-color: rgba(0, 204, 255, 0.5);
+            --shadow-color: rgba(0, 204, 255, 0.2);
         }
         
         * {
@@ -406,7 +406,11 @@
         }
     
         .crew-container {
-            /* For the right side of ship stats (crew details) */
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px var(--shadow-color);
+            border: 1px solid var(--border-color);
         }
     
         .captain {
@@ -605,7 +609,7 @@
         .power-module.active {
             background-color: rgba(56, 142, 60, 0.15);
             border-left-color: #388e3c;
-            box-shadow: 0 0 10px var(--accent);
+            box-shadow: 0 0 10px var(--success);
         }
     
         .power-module:hover {
@@ -997,20 +1001,20 @@
         }
         
         .background-selector {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background: var(--card-bg);
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-          z-index: 2001;
-          max-width: 80%;
-          max-height: 80%;
-          overflow-y: auto;
-          border: 2px solid var(--border-color);
-          display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 2001;
+            width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid var(--border-color);
+            display: none; /* Start hidden */
         }
         
         .background-selector.visible {
@@ -2409,28 +2413,8 @@
         
         // Helper function to get proficiency bonus from character data
         function getProficiencyBonus(characterData) {
-            // Get character level
-            let level = 1; // Default to level 1
-            
-            // Try to extract level from character data
-            if (characterData.system.details && characterData.system.details.level) {
-                level = characterData.system.details.level;
-            } else if (characterData.system.levels) {
-                level = characterData.system.levels;
-            }
-            
-            // Calculate proficiency bonus according to D&D 5e rules
-            if (level <= 4) {
-                return 2;
-            } else if (level <= 8) {
-                return 3;
-            } else if (level <= 12) {
-                return 4;
-            } else if (level <= 16) {
-                return 5;
-            } else {
-                return 6; // Level 17-20
-            }
+            // Always return 3 regardless of character level
+            return 3;
         }
         
         // Show notification
@@ -2557,13 +2541,12 @@
         }
         // Background selection functionality
         function toggleBackgroundSelector() {
-            console.log('Background selector toggle called');
             const selector = document.getElementById('backgroundSelector');
-            console.log('Selector element:', selector);
-            
-            // Use 'visible' class consistently (not 'active')
-            selector.classList.toggle('visible');
-            console.log('After toggle:', selector.classList);
+            if (selector.style.display === 'block') {
+                selector.style.display = 'none';
+            } else {
+                selector.style.display = 'block';
+            }
         }
         
         function initializeBackgroundSelection() {
