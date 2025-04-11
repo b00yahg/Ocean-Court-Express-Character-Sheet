@@ -192,11 +192,15 @@
             background-color: var(--secondary);
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 8px 12px; /* Increased padding */
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 14px; /* Increased font size */
             transition: all 0.2s;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: bold;
+            min-width: 150px; /* Set minimum width */
+            text-align: center;
         }
         
         .upload-btn:hover {
@@ -592,11 +596,39 @@
             display: inline-block;
             background-color: var(--light);
             color: var(--secondary);
-            padding: 2px 6px;
+            padding: 4px 8px; /* Increased padding */
             border-radius: 3px;
-            font-size: 0.8rem;
+            font-size: 0.9rem; /* Increased font size */
             margin-right: 5px;
             margin-top: 5px;
+            font-family: 'Exo 2', sans-serif;
+        }
+        .weapon-property input[type="number"] {
+            width: 40px; /* Wider input */
+            text-align: center;
+            padding: 2px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px 10px; /* Increased padding */
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 14px; /* Standardized font size */
+            background-color: var(--light);
+            color: var(--dark);
+            font-family: 'Exo 2', sans-serif;
+        }
+        .crew-role-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text);
+            font-size: 16px; /* Increased size */
+            font-family: 'Quantico', sans-serif;
         }
     
         .power-module {
@@ -762,6 +794,7 @@
             padding: 15px;
             background-color: var(--light);
             border-radius: 5px;
+            font-size: 14px; /* Added explicit font size */
         }
     
         .movement-item {
@@ -773,15 +806,19 @@
         .movement-label {
             font-weight: bold;
             color: var(--secondary);
-            min-width: 160px;
+            min-width: 180px; /* Increased width for better alignment */
+            font-size: 16px; /* Slightly larger font */
+            font-family: 'Quantico', sans-serif; /* Use Quantico for labels */
         }
     
         .movement-value {
             font-weight: bold;
+            color: var(--text);
+            font-size: 16px; /* Slightly larger font */
         }
     
         .movement-note {
-            font-size: 0.8rem;
+            font-size: 14px; /* Slightly larger font */
             color: var(--text);
             margin-left: 10px;
             font-style: italic;
