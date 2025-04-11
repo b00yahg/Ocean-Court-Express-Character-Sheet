@@ -345,15 +345,13 @@
         }
     
         .stats-container {
-            position: sticky;
-            top: 0;
+            position: relative; /* Changed from sticky */
             z-index: 100;
             background-color: var(--card-bg);
             padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px var(--shadow-color);
+            box-shadow: 0 0 25px rgba(0, 204, 255, 0.2); /* More noticeable glow */
             border: 2px solid var(--border-color);
-            backdrop-filter: blur(5px);
             margin-bottom: 15px;
             display: block; /* Ensure it's visible */
         }
@@ -1109,10 +1107,6 @@
             overflow-y: auto;
             border: 2px solid var(--border-color);
             display: none;
-        }
-        
-        .background-selector.active {
-            display: block;
         }
         
         .background-selector-header {
@@ -1924,24 +1918,15 @@
             // Update any displays or calculations that depend on these values
             saveToLocalStorage();
         }
-        // Handle fixed header visibility
         function handleFixedHeader() {
-            console.log('Checking scroll position');
-            const statsContainer = document.querySelector('.stats-container');
+            // Always show the fixed header when scrolling down
+            const scrollPosition = window.scrollY || document.documentElement.scrollTop;
             const fixedStats = document.getElementById('fixedStats');
             
-            if (statsContainer) {
-                const rect = statsContainer.getBoundingClientRect();
-                console.log('Stats container position:', rect.top, rect.bottom);
-                
-                // Show fixed header when original stats are scrolled out of view
-                if (rect.top < -100) {
-                    fixedStats.classList.add('visible');
-                    console.log('Fixed stats shown');
-                } else {
-                    fixedStats.classList.remove('visible');
-                    console.log('Fixed stats hidden');
-                }
+            if (scrollPosition > 200) { // Show after scrolling 200px
+                fixedStats.classList.add('visible');
+            } else {
+                fixedStats.classList.remove('visible');
             }
         }
         
